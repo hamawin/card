@@ -1,0 +1,11 @@
+BEGIN:VCARD
+VERSION:3.0
+FN:홍길동
+N:홍;길동;;;
+ORG:YOUR COMPANY NAME
+TITLE:Chief Executive Officer
+TEL;TYPE=CELL:+82-10-0000-0000
+EMAIL;TYPE=WORK:your@email.com
+ADR;TYPE=WORK:;;서울특별시 강남구 테헤란로 00길 00;;;;대한민국
+URL:https://your-namecard-url.com
+END:VCARD

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>명함 편집</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #000; --card: #111; --border: #222; --border2: #2a2a2a;
+      --green: #39ff14; --purple: #9b30ff; --purple2: #c77dff;
+      --white: #f0f0f0; --gray: #888;
+    }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--black); color: var(--white);
+      min-height: 100vh; padding-bottom: 60px;
+    }
+    .glow-green {
+      position: fixed; width: 400px; height: 400px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(57,255,20,.08) 0%, transparent 70%);
+      top: -100px; left: -100px; pointer-events: none; z-index: 0;
+    }
+    .glow-purple {
+      position: fixed; width: 500px; height: 500px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(155,48,255,.07) 0%, transparent 70%);
+      bottom: -120px; right: -120px; pointer-events: none; z-index: 0;
+    }
+
+    .wrap {
+      position: relative; z-index: 1;
+      max-width: 560px; margin: 0 auto; padding: 44px 20px 40px;
+      display: flex; flex-direction: column; gap: 24px;
+    }
+
+    /* Header */
+    .header {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .header h1 {
+      font-size: 20px; font-weight: 700;
+      background: linear-gradient(90deg, var(--green), var(--purple2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .preview-link {
+      font-size: 12px; color: var(--gray); text-decoration: none;
+      border: 1px solid var(--border2); padding: 6px 14px; border-radius: 20px;
+      display: flex; align-items: center; gap: 6px; transition: all .2s;
+    }
+    .preview-link:hover { border-color: var(--green); color: var(--green); }
+    .preview-link svg { width: 14px; height: 14px; fill: currentColor; }
+
+    /* Section */
+    .section {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 20px; padding: 24px 22px;
+      display: flex; flex-direction: column; gap: 18px;
+      position: relative; overflow: hidden;
+    }
+    .section::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--green), var(--purple));
+    }
+    .section-title {
+      font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--gray); margin-bottom: 2px;
+    }
+
+    /* Photo upload */
+    .photo-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+    }
+    .photo-upload {
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .photo-upload label.lbl {
+      font-size: 11px; color: var(--gray); letter-spacing: .1em; text-transform: uppercase;
+    }
+    .photo-drop {
+      position: relative; border: 1.5px dashed var(--border2);
+      border-radius: 14px; overflow: hidden; cursor: pointer;
+      transition: border-color .2s;
+      background: #0d0d0d;
+    }
+    .photo-drop:hover { border-color: var(--purple); }
+    .photo-drop input[type=file] {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer; z-index: 2;
+    }
+    .photo-drop .preview {
+      width: 100%; aspect-ratio: 1/1;
+      object-fit: cover; display: block;
+    }
+    .photo-drop.card-ratio .preview { aspect-ratio: 9/5; }
+    .photo-drop .placeholder {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 8px; padding: 24px 12px; color: #444; font-size: 11px; text-align: center;
+    }
+    .photo-drop .placeholder svg { width: 28px; height: 28px; fill: #2a2a2a; }
+    .photo-drop .clear-btn {
+      position: absolute; top: 6px; right: 6px; z-index: 3;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: rgba(0,0,0,.7); border: 1px solid #333;
+      color: #888; font-size: 14px; line-height: 20px; text-align: center;
+      cursor: pointer; display: none; user-select: none;
+    }
+    .photo-drop:hover .clear-btn { display: block; }
+    .photo-drop.has-img .clear-btn { display: block; }
+
+    /* Card ratio photos */
+    .photo-upload.wide { grid-column: 1 / -1; }
+
+    /* Field */
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field > label {
+      font-size: 11px; color: var(--gray); letter-spacing: .12em; text-transform: uppercase;
+    }
+    .field input, .field textarea {
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px; color: var(--white);
+      background: #0d0d0d; border: 1px solid var(--border2);
+      border-radius: 10px; padding: 11px 14px;
+      outline: none; transition: border-color .2s; width: 100%;
+      resize: none;
+    }
+    .field input:focus, .field textarea:focus {
+      border-color: var(--purple);
+    }
+    .field textarea { min-height: 60px; line-height: 1.5; }
+
+    /* Lang tabs inside field */
+    .lang-fields { display: flex; flex-direction: column; gap: 10px; }
+    .lang-row { display: flex; align-items: center; gap: 10px; }
+    .lang-tag {
+      font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--green); border: 1px solid rgba(57,255,20,.3);
+      padding: 3px 10px; border-radius: 20px; flex-shrink: 0; width: 48px;
+      text-align: center;
+    }
+    .lang-tag.jp { color: var(--purple2); border-color: rgba(199,125,255,.3); }
+    .lang-tag.en { color: #60a5fa; border-color: rgba(96,165,250,.3); }
+
+    /* Save button */
+    .save-btn {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      background: linear-gradient(135deg, var(--green), #22c55e);
+      border: none; border-radius: 16px; padding: 16px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px; font-weight: 700; color: #000;
+      cursor: pointer; box-shadow: 0 0 28px rgba(57,255,20,.3);
+      transition: all .25s;
+    }
+    .save-btn:hover { box-shadow: 0 0 50px rgba(57,255,20,.5); transform: translateY(-1px); }
+    .save-btn svg { width: 18px; height: 18px; fill: #000; }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: var(--card); border: 1px solid var(--green);
+      color: var(--green); font-size: 13px; padding: 10px 22px;
+      border-radius: 30px; box-shadow: 0 0 20px rgba(57,255,20,.2);
+      opacity: 0; transition: all .3s; pointer-events: none; white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+
+<div class="glow-green"></div>
+<div class="glow-purple"></div>
+
+<div class="wrap">
+
+  <!-- Header -->
+  <div class="header">
+    <h1>명함 편집</h1>
+    <a href="index.html" class="preview-link">
+      <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.7 7.6 1 12c1.7 4.4 6 7.5 11 7.5s9.3-3.1 11-7.5C21.3 7.6 17 4.5 12 4.5zm0 12.5c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5zm0-8c-1.7 0-3 1.3-3 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3z"/></svg>
+      미리보기
+    </a>
+  </div>
+
+  <!-- Photos -->
+  <div class="section">
+    <div class="section-title">사진</div>
+    <div class="photo-grid">
+
+      <!-- Profile -->
+      <div class="photo-upload">
+        <label class="lbl">내 사진</label>
+        <div class="photo-drop" id="drop-profile">
+          <input type="file" accept="image/*" onchange="handlePhoto(this,'profile')" />
+          <span class="clear-btn" onclick="clearPhoto(event,'profile')">×</span>
+          <div class="placeholder" id="ph-profile">
+            <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+            내 사진
+          </div>
+          <img class="preview" id="img-profile" style="display:none" />
+        </div>
+      </div>
+
+      <!-- Logo -->
+      <div class="photo-upload">
+        <label class="lbl">회사 로고</label>
+        <div class="photo-drop" id="drop-logo">
+          <input type="file" accept="image/*" onchange="handlePhoto(this,'logo')" />
+          <span class="clear-btn" onclick="clearPhoto(event,'logo')">×</span>
+          <div class="placeholder" id="ph-logo">
+            <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            회사 로고
+          </div>
+          <img class="preview" id="img-logo" style="display:none" />
+        </div>
+      </div>
+
+      <!-- Card front -->
+      <div class="photo-upload wide">
+        <label class="lbl">명함 앞면</label>
+        <div class="photo-drop card-ratio" id="drop-cardFront">
+          <input type="file" accept="image/*" onchange="handlePhoto(this,'cardFront')" />
+          <span class="clear-btn" onclick="clearPhoto(event,'cardFront')">×</span>
+          <div class="placeholder" id="ph-cardFront">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/></svg>
+            명함 앞면
+          </div>
+          <img class="preview" id="img-cardFront" style="display:none" />
+        </div>
+      </div>
+
+      <!-- Card back -->
+      <div class="photo-upload wide">
+        <label class="lbl">명함 뒷면</label>
+        <div class="photo-drop card-ratio" id="drop-cardBack">
+          <input type="file" accept="image/*" onchange="handlePhoto(this,'cardBack')" />
+          <span class="clear-btn" onclick="clearPhoto(event,'cardBack')">×</span>
+          <div class="placeholder" id="ph-cardBack">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/></svg>
+            명함 뒷면
+          </div>
+          <img class="preview" id="img-cardBack" style="display:none" />
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Company -->
+  <div class="section">
+    <div class="section-title">회사명</div>
+    <div class="lang-fields">
+      <div class="lang-row">
+        <span class="lang-tag">한</span>
+        <div class="field" style="flex:1"><input id="company-ko" placeholder="회사명 (한국어)" /></div>
+      </div>
+      <div class="lang-row">
+        <span class="lang-tag en">EN</span>
+        <div class="field" style="flex:1"><input id="company-en" placeholder="Company Name (English)" /></div>
+      </div>
+      <div class="lang-row">
+        <span class="lang-tag jp">JP</span>
+        <div class="field" style="flex:1"><input id="company-ja" placeholder="会社名 (日本語)" /></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Name -->
+  <div class="section">
+    <div class="section-title">이름</div>
+    <div class="lang-fields">
+      <div class="lang-row">
+        <span class="lang-tag">한</span>
+        <div class="field" style="flex:1"><input id="name-ko" placeholder="이름 (한국어)" /></div>
+      </div>
+      <div class="lang-row">
+        <span class="lang-tag en">EN</span>
+        <div class="field" style="flex:1"><input id="name-en" placeholder="Name (English)" /></div>
+      </div>
+      <div class="lang-row">
+        <span class="lang-tag jp">JP</span>
+        <div class="field" style="flex:1"><input id="name-ja" placeholder="名前 (日本語)" /></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Title -->
+  <div class="section">
+    <div class="section-title">직급</div>
+    <div class="lang-fields">
+      <div class="lang-row">
+        <span class="lang-tag">한</span>
+        <div class="field" style="flex:1"><input id="title-ko" placeholder="직급 (한국어)" /></div>
+      </div>
+      <div class="lang-row">
+        <span class="lang-tag en">EN</span>
+        <div class="field" style="flex:1"><input id="title-en" placeholder="Title (English)" /></div>
+      </div>
+      <div class="lang-row">
+        <span class="lang-tag jp">JP</span>
+        <div class="field" style="flex:1"><input id="title-ja" placeholder="役職 (日本語)" /></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dept -->
+  <div class="section">
+    <div class="section-title">부서명</div>
+    <div class="lang-fields">
+      <div class="lang-row">
+        <span class="lang-tag">한</span>
+        <div class="field" style="flex:1"><input id="dept-ko" placeholder="부서명 (한국어)" /></div>
+      </div>
+      <div class="lang-row">
+        <span class="lang-tag en">EN</span>
+        <div class="field" style="flex:1"><input id="dept-en" placeholder="Department (English)" /></div>
+      </div>
+      <div class="lang-row">
+        <span class="lang-tag jp">JP</span>
+        <div class="field" style="flex:1"><input id="dept-ja" placeholder="部署名 (日本語)" /></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact -->
+  <div class="section">
+    <div class="section-title">연락처</div>
+    <div class="field">
+      <label>이메일</label>
+      <input id="email" type="email" placeholder="your@email.com" />
+    </div>
+    <div class="field">
+      <label>휴대폰</label>
+      <input id="phone" type="tel" placeholder="010-0000-0000" />
+    </div>
+  </div>
+
+  <!-- Remember -->
+  <div class="section">
+    <div class="section-title">Remember 앱 링크</div>
+    <div class="field">
+      <label>Temporary Link</label>
+      <input id="rememberLink" type="url" placeholder="https://rmb.me/..." />
+    </div>
+  </div>
+
+  <!-- Save -->
+  <button class="save-btn" onclick="saveAll()">
+    <svg viewBox="0 0 24 24"><path d="M17 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3zm3-10H5V5h10v4z"/></svg>
+    저장하고 명함 보기
+  </button>
+
+</div>
+
+<div class="toast" id="toast">저장됐습니다!</div>
+
+<script>
+  const STORE = 'namecard_data';
+  const photos = {}; // key → base64
+
+  /* ── Load existing data ─────────────────────────── */
+  function load() {
+    const raw = localStorage.getItem(STORE);
+    if (!raw) return;
+    const d = JSON.parse(raw);
+
+    const fields = ['company','name','title','dept'];
+    const langs  = ['ko','en','ja'];
+    fields.forEach(f => langs.forEach(l => {
+      const el = document.getElementById(`${f}-${l}`);
+      if (el && d[f]?.[l]) el.value = d[f][l];
+    }));
+
+    ['email','phone','rememberLink'].forEach(k => {
+      const el = document.getElementById(k);
+      if (el && d[k]) el.value = d[k];
+    });
+
+    ['profile','logo','cardFront','cardBack'].forEach(k => {
+      if (d[k]) { photos[k] = d[k]; applyPhoto(k, d[k]); }
+    });
+  }
+
+  /* ── Photo handling ─────────────────────────────── */
+  function handlePhoto(input, key) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      photos[key] = e.target.result;
+      applyPhoto(key, e.target.result);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function applyPhoto(key, src) {
+    const img  = document.getElementById(`img-${key}`);
+    const ph   = document.getElementById(`ph-${key}`);
+    const drop = document.getElementById(`drop-${key}`);
+    img.src = src;
+    img.style.display = 'block';
+    ph.style.display  = 'none';
+    drop.classList.add('has-img');
+  }
+
+  function clearPhoto(e, key) {
+    e.stopPropagation();
+    delete photos[key];
+    const img  = document.getElementById(`img-${key}`);
+    const ph   = document.getElementById(`ph-${key}`);
+    const drop = document.getElementById(`drop-${key}`);
+    img.src = ''; img.style.display = 'none';
+    ph.style.display = 'flex';
+    drop.classList.remove('has-img');
+  }
+
+  /* ── Save ───────────────────────────────────────── */
+  function saveAll() {
+    const d = {
+      company: { ko: v('company-ko'), en: v('company-en'), ja: v('company-ja') },
+      name:    { ko: v('name-ko'),    en: v('name-en'),    ja: v('name-ja')    },
+      title:   { ko: v('title-ko'),   en: v('title-en'),   ja: v('title-ja')   },
+      dept:    { ko: v('dept-ko'),    en: v('dept-en'),    ja: v('dept-ja')    },
+      email:       v('email'),
+      phone:       v('phone'),
+      rememberLink:v('rememberLink'),
+      ...photos,
+    };
+    try {
+      localStorage.setItem(STORE, JSON.stringify(d));
+      showToast('저장됐습니다!');
+      setTimeout(() => { window.location.href = 'index.html'; }, 900);
+    } catch(e) {
+      showToast('사진 용량이 너무 큽니다. 작은 파일을 사용해주세요.');
+    }
+  }
+
+  function v(id) { return document.getElementById(id)?.value.trim() || ''; }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  load();
+</script>
+</body>
+</html>
