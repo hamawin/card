@@ -1,0 +1,14 @@
+{
+  "company": { "ko": "갤럭시코퍼레이션", "en": "Galaxy Corporation", "ja": "ギャラクシーコーポレーション" },
+  "name":    { "ko": "하형석", "en": "Justin Ha", "ja": "ハ・ヒョンソク (河 炯 碩)" },
+  "title":   { "ko": "이사 / CEO Staff", "en": "Director / CEO Staff", "ja": "取締役 / CEO スタッフ" },
+  "dept":    { "ko": "CVC / M&A", "en": "CVC / M&A", "ja": "CVC / M&A" },
+  "email":        "justin.ha@galaxyuniverse.ai",
+  "phone":        "+82-010-7727-3028",
+  "rememberLink": "https://link.rmbr.in/g7fi8o",
+  "profile":   "photo/profile.jpg",
+  "logo":      "photo/logo.png",
+  "logoSmall": "photo/logo_small.jpg",
+  "cardFront": "photo/card_front.jpg",
+  "cardBack":  "photo/card_back.jpg"
+}
