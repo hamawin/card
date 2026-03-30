@@ -435,14 +435,14 @@
 
       <!-- Topbar -->
       <div class="topbar">
-        <div style="padding-top:44px;width:100%;display:flex;align-items:center;justify-content:space-between;">
-          <span class="logo-tag" style="font-size:10px;">Business Card</span>
-          <div class="lang-switch">
-            <button class="lang-btn active" onclick="setLang('ko')">한국어</button>
-            <button class="lang-btn" onclick="setLang('en')">English</button>
-            <button class="lang-btn" onclick="setLang('ja')">日本語</button>
-          </div>
-        </div>
+        <div style="padding-top:44px;width:100%;display:flex;align-items:center;gap:6px;flex-wrap:nowrap;">
+  <span class="logo-tag" style="font-size:10px;white-space:nowrap;flex-shrink:0;letter-spacing:.1em;">Business Card</span>
+  <div style="display:flex;gap:5px;margin-left:auto;flex-shrink:0;">
+    <button class="lang-btn active" style="font-size:10px;padding:4px 10px;white-space:nowrap;" onclick="setLang('ko')">한국어</button>
+    <button class="lang-btn" style="font-size:10px;padding:4px 10px;white-space:nowrap;" onclick="setLang('en')">English</button>
+    <button class="lang-btn" style="font-size:10px;padding:4px 10px;white-space:nowrap;" onclick="setLang('ja')">日本語</button>
+  </div>
+</div>
       </div>
 
       <!-- Flip card + download -->
