@@ -28,11 +28,11 @@
     .logo-tag { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--green); border: 1px solid var(--green); padding: 4px 12px; border-radius: 20px; box-shadow: 0 0 10px rgba(57,255,20,.25); }
     .nfc-badge { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--gray); letter-spacing: .1em; }
     .nfc-badge svg { width: 16px; height: 16px; fill: var(--purple); }
-    .company-block { display: flex; align-items: center; gap: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 18px 22px; position: relative; overflow: hidden; }
-    .company-block::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--green), var(--purple)); }
-    .company-logo { width: 52px; height: 52px; border-radius: 14px; background: linear-gradient(135deg, #1a1a1a, #222); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; }
-    .company-logo svg { width: 28px; height: 28px; fill: #333; }
-    .company-logo img { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; }
+    .company-block { display: flex; align-items: center; justify-content: center; background: var(--card); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; position: relative; padding: 18px; }
+    .company-block::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--green), var(--purple)); z-index: 1; }
+    .company-logo-only { width: 100%; height: 120px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .company-logo-placeholder { display: flex; align-items: center; justify-content: center; color: #333; }
+    .company-logo-placeholder svg { width: 36px; height: 36px; fill: #2a2a2a; }
     .company-name-wrap .sub { font-size: 10px; color: var(--gray); letter-spacing: .15em; text-transform: uppercase; margin-bottom: 3px; }
     .company-name-wrap .name { font-size: 18px; font-weight: 700; background: linear-gradient(90deg, var(--green), var(--purple2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .profile-hero { background: var(--card); border: 1px solid var(--border); border-radius: 28px; padding: 40px 28px 36px; display: flex; flex-direction: column; align-items: center; gap: 22px; position: relative; overflow: hidden; }
@@ -44,9 +44,16 @@
     .avatar-ring .inner img, .avatar-ring .inner .placeholder { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
     .avatar-ring .inner .placeholder { display: flex; align-items: center; justify-content: center; background: #151515; }
     .avatar-ring .inner .placeholder svg { width: 44px; height: 44px; fill: #333; }
-    .hero-info { text-align: center; }
-    .hero-info .person-name { font-size: 32px; font-weight: 900; letter-spacing: -.03em; background: linear-gradient(135deg, #fff 40%, var(--purple2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .hero-info .person-title { font-size: 13px; color: var(--gray); margin-top: 6px; font-weight: 300; letter-spacing: .05em; }
+    /* hero card - horizontal layout */
+    .hero-card-inner { display: flex; align-items: stretch; gap: 0; width: 100%; border-radius: 20px; overflow: hidden; background: #0d0d0d; min-height: 160px; }
+    .hero-photo-wrap { width: 42%; flex-shrink: 0; position: relative; overflow: hidden; background: #151515; }
+    .hero-photo-wrap .placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #151515; }
+    .hero-photo-wrap .placeholder svg { width: 44px; height: 44px; fill: #333; }
+    .hero-info-wrap { flex: 1; padding: 22px 18px; display: flex; flex-direction: column; justify-content: center; gap: 6px; }
+    .hero-info-wrap .person-name { font-size: 26px; font-weight: 900; letter-spacing: -.02em; color: #fff; line-height: 1.15; }
+    .hero-info-wrap .person-title { font-size: 12px; color: var(--gray); font-weight: 300; letter-spacing: .03em; }
+    .hero-company-row { display: flex; align-items: center; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #1e1e1e; }
+    .hero-logo-wrap { width: 80px; height: 28px; border-radius: 6px; background: transparent; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
     .remember-btn { display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, rgba(155,48,255,.15), rgba(57,255,20,.07)); border: 1px solid rgba(155,48,255,.45); border-radius: 20px; padding: 20px 22px; text-decoration: none; transition: all .25s; position: relative; overflow: hidden; }
     .remember-btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(155,48,255,.08), rgba(57,255,20,.04)); opacity: 0; transition: opacity .25s; }
     .remember-btn:hover::before { opacity: 1; }
@@ -114,28 +121,34 @@
       </div>
 
       <div class="company-block fade-up d2">
-        <div class="company-logo" id="logo-wrap">
-          <svg viewBox="0 0 24 24" id="logo-placeholder"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-          <img id="logo-img" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:14px;" />
-        </div>
-        <div class="company-name-wrap">
-          <div class="sub">Company</div>
-          <div class="name" id="p1-company">갤럭시코퍼레이션</div>
+        <div class="company-logo-only" id="logo-wrap">
+          <div class="company-logo-placeholder" id="logo-placeholder">
+            <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </div>
+          <img id="logo-img" style="display:none;width:100%;height:100%;object-fit:contain;" />
         </div>
       </div>
 
       <div class="profile-hero fade-up d3">
-        <div class="avatar-ring">
-          <div class="inner">
+        <div class="hero-card-inner">
+          <!-- 왼쪽: 사진 -->
+          <div class="hero-photo-wrap">
             <div class="placeholder" id="profile-placeholder">
               <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
             </div>
-            <img id="profile-img" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:50%;" />
+            <img id="profile-img" style="display:none;width:100%;height:100%;object-fit:cover;" />
           </div>
-        </div>
-        <div class="hero-info">
-          <div class="person-name" id="p1-name">하형석</div>
-          <div class="person-title" id="p1-title">이사 / CEO Staff</div>
+          <!-- 오른쪽: 이름/직급/회사 -->
+          <div class="hero-info-wrap">
+            <div class="person-name" id="p1-name">하형석</div>
+            <div class="person-title" id="p1-title">이사 / CEO Staff</div>
+            <div class="hero-company-row" id="hero-company-row">
+              <div class="hero-logo-wrap" id="hero-logo-wrap">
+                <img id="hero-logo-img" style="display:none;width:100%;height:100%;object-fit:contain;" />
+                <svg id="hero-logo-placeholder" viewBox="0 0 24 24" style="width:20px;height:20px;fill:#333"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -155,7 +168,7 @@
 
       <div class="swipe-hint fade-up d5">
         <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
-        스와이프해서 명함 정보 보기
+        Swipe for contact info
         <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
       </div>
     </div>
@@ -235,11 +248,11 @@
             <div class="val" id="p2-dept" data-ko="CVC / M&A" data-en="CVC / M&A" data-ja="CVC / M&A">CVC / M&A</div>
           </div>
         </div>
-        <a class="info-row" id="email-row" href="mailto:justin.ha@galaxyuniverse.ai">
+        <a class="info-row" id="email-row" href="/cdn-cgi/l/email-protection#d3b9a6a0a7babdfdbbb293b4b2bfb2abaaa6bdbaa5b6a1a0b6fdb2ba">
           <span class="info-icon p"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></span>
           <div class="info-text">
             <div class="lbl" data-ko="이메일" data-en="Email" data-ja="メール">이메일</div>
-            <div class="val" id="p2-email">justin.ha@galaxyuniverse.ai</div>
+            <div class="val" id="p2-email"><span class="__cf_email__" data-cfemail="6f051a1c1b060141070e2f080e030e17161a0106190a1d1c0a410e06">[email&#160;protected]</span></div>
           </div>
           <span class="info-arrow">›</span>
         </a>
@@ -267,7 +280,7 @@
   <svg viewBox="0 0 24 24" style="width:15px;height:15px;fill:#888"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
 </a>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   const pages = document.getElementById('pages');
   const dots  = document.querySelectorAll('.dot');
   function goPage(i) { pages.scrollTo({ left: pages.clientWidth * i, behavior: 'smooth' }); }
@@ -285,10 +298,11 @@
     email:        "justin.ha@galaxyuniverse.ai",
     phone:        "+82-010-7727-3028",
     rememberLink: "https://link.rmbr.in/g7fi8o",
-    profile:   "photo/profile.jpg",
-    logo:      "photo/logo.png",
-    cardFront: "photo/card_front.jpg",
-    cardBack:  "photo/card_back.jpg",
+    profile:    "photo/profile.jpg",
+    logo:       "photo/logo.png",
+    logoSmall:  "photo/logo_small.png",
+    cardFront:  "photo/card_front.jpg",
+    cardBack:   "photo/card_back.jpg",
   };
 /* %%CARD_DATA_END%% */
 
@@ -303,6 +317,7 @@
       phone:        saved.phone        || CARD_DATA.phone,
       profile:      saved.profile      || CARD_DATA.profile,
       logo:         saved.logo         || CARD_DATA.logo,
+      logoSmall:    saved.logoSmall    || CARD_DATA.logoSmall,
       cardFront:    saved.cardFront    || CARD_DATA.cardFront,
       cardBack:     saved.cardBack     || CARD_DATA.cardBack,
       company: { ...CARD_DATA.company, ...(saved.company || {}) },
@@ -318,15 +333,39 @@
       if (img) { img.src = src; img.style.display = 'block'; }
       if (ph)  { ph.style.display = 'none'; }
     }
-    setImg('profile-img',    'profile-placeholder',    d.profile);
-    setImg('logo-img',       null,                     d.logo);
-    if (d.logo) document.getElementById('logo-placeholder')?.remove();
+    setImg('profile-img',       'profile-placeholder',       d.profile);
+    // 사진1: 상단 회사 블록 로고
+    if (d.logo) {
+      const logoImg = document.getElementById('logo-img');
+      const logoPh  = document.getElementById('logo-placeholder');
+      if (logoImg) { logoImg.src = d.logo; logoImg.style.display = 'block'; }
+      if (logoPh)  { logoPh.style.display = 'none'; }
+    }
+    // 사진2: 프로필 하단 작은 로고 (별도 이미지)
+    if (d.logoSmall) {
+      const heroLogo = document.getElementById('hero-logo-img');
+      const heroPh   = document.getElementById('hero-logo-placeholder');
+      if (heroLogo) { heroLogo.src = d.logoSmall; heroLogo.style.display = 'block'; }
+      if (heroPh)   { heroPh.style.display = 'none'; }
+    }
     setImg('card-front-img', 'card-front-placeholder', d.cardFront);
     setImg('card-back-img',  'card-back-placeholder',  d.cardBack);
 
-    if (d.company?.ko) document.getElementById('p1-company').textContent = d.company.ko;
-    if (d.name?.ko)    document.getElementById('p1-name').textContent    = d.name.ko;
-    if (d.title?.ko)   document.getElementById('p1-title').textContent   = d.title.ko;
+    if (d.company?.ko) {
+      const c1 = document.getElementById('p1-company');
+      const c2 = document.getElementById('p1-company-sub');
+      if (c1) c1.textContent = d.company.ko;
+      if (c2) c2.textContent = d.company.ko;
+    }
+    if (d.name?.ko)  document.getElementById('p1-name').textContent  = d.name.ko;
+    if (d.title?.ko) document.getElementById('p1-title').textContent = d.title.ko;
+    // hero logo
+    if (d.logo) {
+      const hl = document.getElementById('hero-logo-img');
+      const hp = document.getElementById('hero-logo-placeholder');
+      if (hl) { hl.src = d.logo; hl.style.display = 'block'; }
+      if (hp) hp.style.display = 'none';
+    }
     if (d.rememberLink) {
       const btn = document.getElementById('remember-btn');
       if (btn) btn.href = d.rememberLink;
@@ -373,13 +412,4 @@
       if (el.dataset[lang]) el.textContent = el.dataset[lang];
     });
     document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.classList.toggle('active',
-        (lang === 'ko' && btn.textContent.trim() === '한국어') ||
-        (lang === 'en' && btn.textContent.trim() === 'English') ||
-        (lang === 'ja' && btn.textContent.trim() === '日本語')
-      );
-    });
-  }
-</script>
-</body>
-</html>
+      btn.classList.toggle(
