@@ -9,88 +9,71 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --black: #000; --card: #111; --border: #222; --border2: #2a2a2a;
-      --green: #39ff14; --purple: #9b30ff; --purple2: #c77dff;
-      --white: #f0f0f0; --gray: #888;
+      --black:#000; --card:#111; --border:#222; --border2:#2a2a2a;
+      --green:#39ff14; --purple:#9b30ff; --purple2:#c77dff; --white:#f0f0f0; --gray:#888;
     }
-    body { font-family: 'Outfit', sans-serif; background: var(--black); color: var(--white); min-height: 100vh; padding-bottom: 60px; }
-    .glow-green { position: fixed; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(57,255,20,.08) 0%, transparent 70%); top: -100px; left: -100px; pointer-events: none; z-index: 0; }
-    .glow-purple { position: fixed; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(155,48,255,.07) 0%, transparent 70%); bottom: -120px; right: -120px; pointer-events: none; z-index: 0; }
-    .wrap { position: relative; z-index: 1; max-width: 560px; margin: 0 auto; padding: 44px 20px 40px; display: flex; flex-direction: column; gap: 24px; }
-
-    /* Header */
-    .header { display: flex; align-items: center; justify-content: space-between; }
-    .header h1 { font-size: 20px; font-weight: 700; background: linear-gradient(90deg, var(--green), var(--purple2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .preview-link { font-size: 12px; color: var(--gray); text-decoration: none; border: 1px solid var(--border2); padding: 6px 14px; border-radius: 20px; display: flex; align-items: center; gap: 6px; transition: all .2s; }
-    .preview-link:hover { border-color: var(--green); color: var(--green); }
-    .preview-link svg { width: 14px; height: 14px; fill: currentColor; }
-
-    /* Section */
-    .section { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 24px 22px; display: flex; flex-direction: column; gap: 18px; position: relative; overflow: hidden; }
-    .section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--green), var(--purple)); }
-    .section-title { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--gray); }
-
-    /* Token section */
-    .token-section { background: linear-gradient(135deg, rgba(155,48,255,.1), rgba(57,255,20,.05)); border: 1px solid rgba(155,48,255,.3); border-radius: 20px; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px; position: relative; overflow: hidden; }
-    .token-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--purple), var(--green)); }
-    .token-status { display: flex; align-items: center; gap: 8px; font-size: 12px; }
-    .token-dot { width: 8px; height: 8px; border-radius: 50%; background: #333; flex-shrink: 0; }
-    .token-dot.ok { background: var(--green); box-shadow: 0 0 8px var(--green); }
-    .token-dot.fail { background: #ff4444; }
-    .token-input-row { display: flex; gap: 8px; }
-    .token-input-row input { flex: 1; font-family: 'Outfit', sans-serif; font-size: 13px; color: var(--white); background: #0d0d0d; border: 1px solid var(--border2); border-radius: 10px; padding: 10px 14px; outline: none; transition: border-color .2s; }
-    .token-input-row input:focus { border-color: var(--purple); }
-    .token-btn { font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 600; padding: 10px 16px; border-radius: 10px; border: none; background: linear-gradient(135deg, var(--purple), #6a0dad); color: #fff; cursor: pointer; white-space: nowrap; transition: opacity .2s; }
-    .token-btn:hover { opacity: .85; }
-    .token-help { font-size: 11px; color: #444; line-height: 1.6; }
-    .token-help a { color: var(--purple2); text-decoration: none; }
-
-    /* Photo upload */
-    .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    .photo-upload { display: flex; flex-direction: column; gap: 8px; }
-    .photo-upload label.lbl { font-size: 11px; color: var(--gray); letter-spacing: .1em; text-transform: uppercase; }
-    .photo-drop { position: relative; border: 1.5px dashed var(--border2); border-radius: 14px; overflow: hidden; cursor: pointer; transition: border-color .2s; background: #0d0d0d; }
-    .photo-drop:hover { border-color: var(--purple); }
-    .photo-drop input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; z-index: 2; }
-    .photo-drop .preview { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; }
-    .photo-drop.card-ratio .preview { aspect-ratio: 9/5; }
-    .photo-drop .placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 24px 12px; color: #444; font-size: 11px; text-align: center; }
-    .photo-drop .placeholder svg { width: 28px; height: 28px; fill: #2a2a2a; }
-    .photo-drop .clear-btn { position: absolute; top: 6px; right: 6px; z-index: 3; width: 22px; height: 22px; border-radius: 50%; background: rgba(0,0,0,.7); border: 1px solid #333; color: #888; font-size: 14px; line-height: 20px; text-align: center; cursor: pointer; display: none; user-select: none; }
-    .photo-drop.has-img .clear-btn { display: block; }
-    .photo-upload.wide { grid-column: 1 / -1; }
-
-    /* Field */
-    .field { display: flex; flex-direction: column; gap: 6px; }
-    .field > label { font-size: 11px; color: var(--gray); letter-spacing: .12em; text-transform: uppercase; }
-    .field input, .field textarea { font-family: 'Outfit', sans-serif; font-size: 14px; color: var(--white); background: #0d0d0d; border: 1px solid var(--border2); border-radius: 10px; padding: 11px 14px; outline: none; transition: border-color .2s; width: 100%; resize: none; }
-    .field input:focus, .field textarea:focus { border-color: var(--purple); }
-    .lang-fields { display: flex; flex-direction: column; gap: 10px; }
-    .lang-row { display: flex; align-items: center; gap: 10px; }
-    .lang-tag { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--green); border: 1px solid rgba(57,255,20,.3); padding: 3px 10px; border-radius: 20px; flex-shrink: 0; width: 48px; text-align: center; }
-    .lang-tag.jp { color: var(--purple2); border-color: rgba(199,125,255,.3); }
-    .lang-tag.en { color: #60a5fa; border-color: rgba(96,165,250,.3); }
-
-    /* Deploy button */
-    .save-btn { display: flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, var(--green), #22c55e); border: none; border-radius: 16px; padding: 16px; font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 700; color: #000; cursor: pointer; box-shadow: 0 0 28px rgba(57,255,20,.3); transition: all .25s; }
-    .save-btn:hover:not(:disabled) { box-shadow: 0 0 50px rgba(57,255,20,.5); transform: translateY(-1px); }
-    .save-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
-    .save-btn svg { width: 18px; height: 18px; fill: #000; }
-
-    /* Progress */
-    .progress { display: none; flex-direction: column; gap: 8px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px; }
-    .progress.show { display: flex; }
-    .progress-title { font-size: 12px; color: var(--gray); letter-spacing: .1em; text-transform: uppercase; }
-    .progress-step { display: flex; align-items: center; gap: 10px; font-size: 13px; color: #555; transition: color .3s; }
-    .progress-step.active { color: var(--white); }
-    .progress-step.done { color: var(--green); }
-    .progress-step.error { color: #ff4444; }
-    .step-icon { width: 18px; height: 18px; flex-shrink: 0; }
-
-    /* Toast */
-    .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--card); border: 1px solid var(--green); color: var(--green); font-size: 13px; padding: 10px 22px; border-radius: 30px; box-shadow: 0 0 20px rgba(57,255,20,.2); opacity: 0; transition: all .3s; pointer-events: none; white-space: nowrap; z-index: 999; }
-    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-    .toast.error { border-color: #ff4444; color: #ff4444; box-shadow: 0 0 20px rgba(255,68,68,.2); }
+    body { font-family:'Outfit',sans-serif; background:var(--black); color:var(--white); min-height:100vh; padding-bottom:60px; }
+    .glow-green { position:fixed; width:400px; height:400px; border-radius:50%; background:radial-gradient(circle,rgba(57,255,20,.08) 0%,transparent 70%); top:-100px; left:-100px; pointer-events:none; z-index:0; }
+    .glow-purple { position:fixed; width:500px; height:500px; border-radius:50%; background:radial-gradient(circle,rgba(155,48,255,.07) 0%,transparent 70%); bottom:-120px; right:-120px; pointer-events:none; z-index:0; }
+    .wrap { position:relative; z-index:1; max-width:560px; margin:0 auto; padding:44px 20px 40px; display:flex; flex-direction:column; gap:24px; }
+    .header { display:flex; align-items:center; justify-content:space-between; }
+    .header h1 { font-size:20px; font-weight:700; background:linear-gradient(90deg,var(--green),var(--purple2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .preview-link { font-size:12px; color:var(--gray); text-decoration:none; border:1px solid var(--border2); padding:6px 14px; border-radius:20px; display:flex; align-items:center; gap:6px; transition:all .2s; }
+    .preview-link:hover { border-color:var(--green); color:var(--green); }
+    .preview-link svg { width:14px; height:14px; fill:currentColor; }
+    .section { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:24px 22px; display:flex; flex-direction:column; gap:18px; position:relative; overflow:hidden; }
+    .section::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--green),var(--purple)); }
+    .section-title { font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--gray); }
+    .token-section { background:linear-gradient(135deg,rgba(155,48,255,.1),rgba(57,255,20,.05)); border:1px solid rgba(155,48,255,.3); border-radius:20px; padding:20px 22px; display:flex; flex-direction:column; gap:12px; position:relative; overflow:hidden; }
+    .token-section::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--purple),var(--green)); }
+    .token-status { display:flex; align-items:center; gap:8px; font-size:12px; }
+    .token-dot { width:8px; height:8px; border-radius:50%; background:#333; flex-shrink:0; }
+    .token-dot.ok { background:var(--green); box-shadow:0 0 8px var(--green); }
+    .token-dot.fail { background:#ff4444; }
+    .token-input-row { display:flex; gap:8px; }
+    .token-input-row input { flex:1; font-family:'Outfit',sans-serif; font-size:13px; color:var(--white); background:#0d0d0d; border:1px solid var(--border2); border-radius:10px; padding:10px 14px; outline:none; transition:border-color .2s; }
+    .token-input-row input:focus { border-color:var(--purple); }
+    .token-btn { font-family:'Outfit',sans-serif; font-size:12px; font-weight:600; padding:10px 16px; border-radius:10px; border:none; background:linear-gradient(135deg,var(--purple),#6a0dad); color:#fff; cursor:pointer; white-space:nowrap; transition:opacity .2s; }
+    .token-btn:hover { opacity:.85; }
+    .token-help { font-size:11px; color:#444; line-height:1.6; }
+    .token-help a { color:var(--purple2); text-decoration:none; }
+    .photo-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .photo-upload { display:flex; flex-direction:column; gap:8px; }
+    .photo-upload label.lbl { font-size:11px; color:var(--gray); letter-spacing:.1em; text-transform:uppercase; }
+    .photo-drop { position:relative; border:1.5px dashed var(--border2); border-radius:14px; overflow:hidden; cursor:pointer; transition:border-color .2s; background:#0d0d0d; }
+    .photo-drop:hover { border-color:var(--purple); }
+    .photo-drop input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; z-index:2; }
+    .photo-drop .preview { width:100%; aspect-ratio:1/1; object-fit:cover; display:block; }
+    .photo-drop.card-ratio .preview { aspect-ratio:9/5; }
+    .photo-drop .placeholder { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; padding:24px 12px; color:#444; font-size:11px; text-align:center; }
+    .photo-drop .placeholder svg { width:28px; height:28px; fill:#2a2a2a; }
+    .photo-drop .clear-btn { position:absolute; top:6px; right:6px; z-index:3; width:22px; height:22px; border-radius:50%; background:rgba(0,0,0,.7); border:1px solid #333; color:#888; font-size:14px; line-height:20px; text-align:center; cursor:pointer; display:none; user-select:none; }
+    .photo-drop.has-img .clear-btn { display:block; }
+    .photo-upload.wide { grid-column:1/-1; }
+    .field { display:flex; flex-direction:column; gap:6px; }
+    .field > label { font-size:11px; color:var(--gray); letter-spacing:.12em; text-transform:uppercase; }
+    .field input { font-family:'Outfit',sans-serif; font-size:14px; color:var(--white); background:#0d0d0d; border:1px solid var(--border2); border-radius:10px; padding:11px 14px; outline:none; transition:border-color .2s; width:100%; }
+    .field input:focus { border-color:var(--purple); }
+    .lang-fields { display:flex; flex-direction:column; gap:10px; }
+    .lang-row { display:flex; align-items:center; gap:10px; }
+    .lang-tag { font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--green); border:1px solid rgba(57,255,20,.3); padding:3px 10px; border-radius:20px; flex-shrink:0; width:48px; text-align:center; }
+    .lang-tag.jp { color:var(--purple2); border-color:rgba(199,125,255,.3); }
+    .lang-tag.en { color:#60a5fa; border-color:rgba(96,165,250,.3); }
+    .save-btn { display:flex; align-items:center; justify-content:center; gap:10px; background:linear-gradient(135deg,var(--green),#22c55e); border:none; border-radius:16px; padding:16px; font-family:'Outfit',sans-serif; font-size:15px; font-weight:700; color:#000; cursor:pointer; box-shadow:0 0 28px rgba(57,255,20,.3); transition:all .25s; }
+    .save-btn:hover:not(:disabled) { box-shadow:0 0 50px rgba(57,255,20,.5); transform:translateY(-1px); }
+    .save-btn:disabled { opacity:.5; cursor:not-allowed; transform:none; }
+    .save-btn svg { width:18px; height:18px; fill:#000; }
+    .progress { display:none; flex-direction:column; gap:8px; background:var(--card); border:1px solid var(--border); border-radius:16px; padding:18px 20px; }
+    .progress.show { display:flex; }
+    .progress-title { font-size:12px; color:var(--gray); letter-spacing:.1em; text-transform:uppercase; }
+    .progress-step { display:flex; align-items:center; gap:10px; font-size:13px; color:#555; transition:color .3s; }
+    .progress-step.active { color:var(--white); }
+    .progress-step.done { color:var(--green); }
+    .progress-step.error { color:#ff4444; }
+    .step-icon { width:18px; height:18px; flex-shrink:0; }
+    .toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--card); border:1px solid var(--green); color:var(--green); font-size:13px; padding:10px 22px; border-radius:30px; box-shadow:0 0 20px rgba(57,255,20,.2); opacity:0; transition:all .3s; pointer-events:none; white-space:nowrap; z-index:999; }
+    .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+    .toast.error { border-color:#ff4444; color:#ff4444; }
   </style>
 </head>
 <body>
@@ -98,8 +81,6 @@
 <div class="glow-purple"></div>
 
 <div class="wrap">
-
-  <!-- Header -->
   <div class="header">
     <h1>Namecard Admin</h1>
     <a href="index.html" class="preview-link">
@@ -108,7 +89,6 @@
     </a>
   </div>
 
-  <!-- GitHub Token -->
   <div class="token-section">
     <div class="section-title">GitHub 인증</div>
     <div class="token-status">
@@ -117,24 +97,23 @@
     </div>
     <div class="token-input-row">
       <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" />
-      <button class="token-btn" onclick="verifyToken()">확인</button>
+      <button class="token-btn" id="verifyBtn">확인</button>
     </div>
     <div class="token-help">
       토큰 발급: GitHub → Settings → Developer settings →
-      <a href="https://github.com/settings/tokens/new?scopes=public_repo" target="_blank">Personal access tokens</a>
-      → <strong>public_repo</strong> 권한 체크
+      <a href="https://github.com/settings/tokens/new?scopes=repo" target="_blank">Personal access tokens</a>
+      → <strong>repo</strong> 권한 체크
     </div>
   </div>
 
-  <!-- Photos -->
   <div class="section">
     <div class="section-title">사진</div>
     <div class="photo-grid">
       <div class="photo-upload">
         <label class="lbl">내 사진</label>
         <div class="photo-drop" id="drop-profile">
-          <input type="file" accept="image/*" onchange="handlePhoto(this,'profile')" />
-          <span class="clear-btn" onclick="clearPhoto(event,'profile')">×</span>
+          <input type="file" accept="image/*" id="file-profile" />
+          <span class="clear-btn" id="clear-profile">×</span>
           <div class="placeholder" id="ph-profile"><svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>내 사진</div>
           <img class="preview" id="img-profile" style="display:none" />
         </div>
@@ -142,8 +121,8 @@
       <div class="photo-upload">
         <label class="lbl">회사 로고 (상단)</label>
         <div class="photo-drop" id="drop-logo">
-          <input type="file" accept="image/*" onchange="handlePhoto(this,'logo')" />
-          <span class="clear-btn" onclick="clearPhoto(event,'logo')">×</span>
+          <input type="file" accept="image/*" id="file-logo" />
+          <span class="clear-btn" id="clear-logo">×</span>
           <div class="placeholder" id="ph-logo"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>상단 로고</div>
           <img class="preview" id="img-logo" style="display:none" />
         </div>
@@ -151,8 +130,8 @@
       <div class="photo-upload">
         <label class="lbl">회사 로고 (프로필)</label>
         <div class="photo-drop" id="drop-logoSmall">
-          <input type="file" accept="image/*" onchange="handlePhoto(this,'logoSmall')" />
-          <span class="clear-btn" onclick="clearPhoto(event,'logoSmall')">×</span>
+          <input type="file" accept="image/*" id="file-logoSmall" />
+          <span class="clear-btn" id="clear-logoSmall">×</span>
           <div class="placeholder" id="ph-logoSmall"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>프로필 로고</div>
           <img class="preview" id="img-logoSmall" style="display:none" />
         </div>
@@ -160,8 +139,8 @@
       <div class="photo-upload wide">
         <label class="lbl">명함 앞면</label>
         <div class="photo-drop card-ratio" id="drop-cardFront">
-          <input type="file" accept="image/*" onchange="handlePhoto(this,'cardFront')" />
-          <span class="clear-btn" onclick="clearPhoto(event,'cardFront')">×</span>
+          <input type="file" accept="image/*" id="file-cardFront" />
+          <span class="clear-btn" id="clear-cardFront">×</span>
           <div class="placeholder" id="ph-cardFront"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/></svg>명함 앞면</div>
           <img class="preview" id="img-cardFront" style="display:none;aspect-ratio:9/5" />
         </div>
@@ -169,8 +148,8 @@
       <div class="photo-upload wide">
         <label class="lbl">명함 뒷면</label>
         <div class="photo-drop card-ratio" id="drop-cardBack">
-          <input type="file" accept="image/*" onchange="handlePhoto(this,'cardBack')" />
-          <span class="clear-btn" onclick="clearPhoto(event,'cardBack')">×</span>
+          <input type="file" accept="image/*" id="file-cardBack" />
+          <span class="clear-btn" id="clear-cardBack">×</span>
           <div class="placeholder" id="ph-cardBack"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/></svg>명함 뒷면</div>
           <img class="preview" id="img-cardBack" style="display:none;aspect-ratio:9/5" />
         </div>
@@ -178,7 +157,6 @@
     </div>
   </div>
 
-  <!-- Company -->
   <div class="section">
     <div class="section-title">회사명</div>
     <div class="lang-fields">
@@ -187,8 +165,6 @@
       <div class="lang-row"><span class="lang-tag jp">JP</span><div class="field" style="flex:1"><input id="company-ja" placeholder="会社名 (日本語)" /></div></div>
     </div>
   </div>
-
-  <!-- Name -->
   <div class="section">
     <div class="section-title">이름</div>
     <div class="lang-fields">
@@ -197,8 +173,6 @@
       <div class="lang-row"><span class="lang-tag jp">JP</span><div class="field" style="flex:1"><input id="name-ja" placeholder="名前 (日本語)" /></div></div>
     </div>
   </div>
-
-  <!-- Title -->
   <div class="section">
     <div class="section-title">직급</div>
     <div class="lang-fields">
@@ -207,8 +181,6 @@
       <div class="lang-row"><span class="lang-tag jp">JP</span><div class="field" style="flex:1"><input id="title-ja" placeholder="役職 (日本語)" /></div></div>
     </div>
   </div>
-
-  <!-- Dept -->
   <div class="section">
     <div class="section-title">부서명</div>
     <div class="lang-fields">
@@ -217,184 +189,186 @@
       <div class="lang-row"><span class="lang-tag jp">JP</span><div class="field" style="flex:1"><input id="dept-ja" placeholder="部署名 (日本語)" /></div></div>
     </div>
   </div>
-
-  <!-- Contact -->
   <div class="section">
     <div class="section-title">연락처</div>
     <div class="field"><label>이메일</label><input id="email" type="email" placeholder="your@email.com" /></div>
     <div class="field"><label>휴대폰</label><input id="phone" type="tel" placeholder="010-0000-0000" /></div>
   </div>
-
-  <!-- Remember -->
   <div class="section">
     <div class="section-title">Remember 앱 링크</div>
     <div class="field"><label>Temporary Link</label><input id="rememberLink" type="url" placeholder="https://rmb.me/..." /></div>
   </div>
 
-  <!-- Progress -->
   <div class="progress" id="progress">
     <div class="progress-title">배포 진행 중</div>
-    <div class="progress-step" id="step1">
-      <svg class="step-icon" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>
-      사진 업로드
-    </div>
-    <div class="progress-step" id="step2">
-      <svg class="step-icon" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>
-      명함 데이터 업데이트
-    </div>
-    <div class="progress-step" id="step3">
-      <svg class="step-icon" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>
-      GitHub Pages 배포
-    </div>
+    <div class="progress-step" id="step1"><svg class="step-icon" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>사진 업로드</div>
+    <div class="progress-step" id="step2"><svg class="step-icon" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>data.json 업데이트</div>
+    <div class="progress-step" id="step3"><svg class="step-icon" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>GitHub Pages 배포 완료</div>
   </div>
 
-  <!-- Deploy button -->
-  <button class="save-btn" id="saveBtn" onclick="deploy()">
+  <button class="save-btn" id="saveBtn">
     <svg viewBox="0 0 24 24"><path d="M17 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3zm3-10H5V5h10v4z"/></svg>
     <span id="saveBtnText">저장 및 배포</span>
   </button>
-
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script data-cfasync="false">
-  const OWNER = 'hamawin';
-  const REPO  = 'card';
-  const BRANCH = 'main';
-  const API = 'https://api.github.com';
-  const STORE = 'namecard_admin';
+  var OWNER = 'hamawin';
+  var REPO  = 'card';
+  var BRANCH = 'main';
+  var API = 'https://api.github.com';
+  var STORE = 'namecard_admin';
+  var photos = {};
+  var token = '';
 
-  const photos = {};
-  let token = '';
+  // 기본값
+  var DEFAULTS = {
+    company: { ko: '갤럭시코퍼레이션', en: 'Galaxy Corporation', ja: 'ギャラクシーコーポレーション' },
+    name:    { ko: '하형석', en: 'Justin Ha', ja: 'ハ・ヒョンソク (河 炯 碩)' },
+    title:   { ko: '이사 / CEO Staff', en: 'Director / CEO Staff', ja: '取締役 / CEO スタッフ' },
+    dept:    { ko: 'CVC / M&A', en: 'CVC / M&A', ja: 'CVC / M&A' },
+    email: 'justin.ha@galaxyuniverse.ai',
+    phone: '+82-010-7727-3028',
+    rememberLink: 'https://link.rmbr.in/g7fi8o',
+    profile:   'photo/profile.jpg',
+    logo:      'photo/logo.png',
+    logoSmall: 'photo/logo_small.jpg',
+    cardFront: 'photo/card_front.jpg',
+    cardBack:  'photo/card_back.jpg'
+  };
 
-  /* ── Token ──────────────────────────────────────── */
-  async function verifyToken() {
+  // 토큰
+  document.getElementById('verifyBtn').onclick = function() { verifyToken(); };
+  document.getElementById('tokenInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') verifyToken();
+  });
+
+  function verifyToken() {
     token = document.getElementById('tokenInput').value.trim();
     if (!token) return;
-    try {
-      const r = await ghFetch(`/repos/${OWNER}/${REPO}`);
-      if (r.ok) {
-        setTokenStatus(true);
-        localStorage.setItem(STORE + '_token', token);
-        loadForm();
-      } else {
-        setTokenStatus(false);
-      }
-    } catch { setTokenStatus(false); }
+    ghFetch('/repos/' + OWNER + '/' + REPO)
+      .then(function(r) {
+        if (r.ok) {
+          setTokenStatus(true);
+          localStorage.setItem(STORE + '_token', token);
+          loadForm();
+        } else {
+          setTokenStatus(false);
+        }
+      })
+      .catch(function() { setTokenStatus(false); });
   }
 
   function setTokenStatus(ok) {
-    const dot  = document.getElementById('tokenDot');
-    const text = document.getElementById('tokenStatusText');
-    dot.className  = 'token-dot ' + (ok ? 'ok' : 'fail');
-    text.textContent = ok ? `✓ ${OWNER}/${REPO} 접근 확인` : '❌ 토큰 오류 또는 권한 없음';
+    document.getElementById('tokenDot').className = 'token-dot ' + (ok ? 'ok' : 'fail');
+    document.getElementById('tokenStatusText').textContent = ok
+      ? '✓ ' + OWNER + '/' + REPO + ' 접근 확인'
+      : '❌ 토큰 오류 또는 권한 없음';
   }
 
-  /* ── GitHub API ─────────────────────────────────── */
-  function ghFetch(path, opts = {}) {
-    return fetch(API + path, {
-      ...opts,
-      headers: { Authorization: `token ${token}`, 'Content-Type': 'application/json', ...opts.headers },
-    });
+  function ghFetch(path, opts) {
+    opts = opts || {};
+    return fetch(API + path, Object.assign({}, opts, {
+      headers: Object.assign({ Authorization: 'token ' + token, 'Content-Type': 'application/json' }, opts.headers || {})
+    }));
   }
 
-  async function getFileSHA(path) {
-    const r = await ghFetch(`/repos/${OWNER}/${REPO}/contents/${path}?ref=${BRANCH}`);
-    if (!r.ok) return null;
-    const j = await r.json();
-    return { sha: j.sha, content: j.content };
+  function getFileSHA(path) {
+    return ghFetch('/repos/' + OWNER + '/' + REPO + '/contents/' + path + '?ref=' + BRANCH)
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .then(function(j) { return j ? { sha: j.sha, content: j.content } : null; });
   }
 
-  async function uploadFile(filePath, base64Content, message, sha) {
-    const body = { message, content: base64Content, branch: BRANCH };
+  function uploadFile(filePath, base64Content, message, sha) {
+    var body = { message: message, content: base64Content, branch: BRANCH };
     if (sha) body.sha = sha;
-    const r = await ghFetch(`/repos/${OWNER}/${REPO}/contents/${filePath}`, {
-      method: 'PUT', body: JSON.stringify(body),
+    return ghFetch('/repos/' + OWNER + '/' + REPO + '/contents/' + filePath, {
+      method: 'PUT', body: JSON.stringify(body)
+    }).then(function(r) {
+      if (!r.ok) throw new Error('Upload failed: ' + filePath);
+      return r.json();
     });
-    if (!r.ok) throw new Error(`Upload failed: ${filePath}`);
-    return r.json();
   }
 
-  /* ── Photo handling ─────────────────────────────── */
+  // 사진 처리
+  var photoKeys = ['profile', 'logo', 'logoSmall', 'cardFront', 'cardBack'];
+  photoKeys.forEach(function(key) {
+    document.getElementById('file-' + key).onchange = function() { handlePhoto(this, key); };
+    document.getElementById('clear-' + key).onclick = function(e) { clearPhoto(e, key); };
+  });
+
   function handlePhoto(input, key) {
-    const file = input.files[0];
+    var file = input.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = e => { photos[key] = { dataUrl: e.target.result, file }; applyPhoto(key, e.target.result); };
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      photos[key] = { dataUrl: e.target.result, file: file };
+      applyPhoto(key, e.target.result);
+    };
     reader.readAsDataURL(file);
   }
 
   function applyPhoto(key, src) {
-    const img = document.getElementById(`img-${key}`);
-    const ph  = document.getElementById(`ph-${key}`);
-    const drop= document.getElementById(`drop-${key}`);
+    var img  = document.getElementById('img-' + key);
+    var ph   = document.getElementById('ph-' + key);
+    var drop = document.getElementById('drop-' + key);
     img.src = src; img.style.display = 'block';
     ph.style.display = 'none'; drop.classList.add('has-img');
   }
 
   function clearPhoto(e, key) {
-    e.stopPropagation(); delete photos[key];
-    const img = document.getElementById(`img-${key}`);
-    const ph  = document.getElementById(`ph-${key}`);
-    const drop= document.getElementById(`drop-${key}`);
+    e.stopPropagation();
+    delete photos[key];
+    var img  = document.getElementById('img-' + key);
+    var ph   = document.getElementById('ph-' + key);
+    var drop = document.getElementById('drop-' + key);
     img.src = ''; img.style.display = 'none';
     ph.style.display = 'flex'; drop.classList.remove('has-img');
   }
 
   function dataUrlToBase64(dataUrl) { return dataUrl.split(',')[1]; }
   function getExt(dataUrl) {
-    const m = dataUrl.match(/^data:([^;]+);/);
+    var m = dataUrl.match(/^data:([^;]+);/);
     if (!m) return 'jpg';
-    return m[1].split('/')[1].replace('jpeg','jpg');
+    return m[1].split('/')[1].replace('jpeg', 'jpg');
   }
 
-  /* ── 기본값 (admin 폼 초기값) ───────────────────── */
-  const CARD_DATA_DEFAULT = {
-    company: { ko: "갤럭시코퍼레이션", en: "Galaxy Corporation", ja: "ギャラクシーコーポレーション" },
-    name:    { ko: "하형석", en: "Justin Ha", ja: "ハ・ヒョンソク (河 炯 碩)" },
-    title:   { ko: "이사 / CEO Staff", en: "Director / CEO Staff", ja: "取締役 / CEO スタッフ" },
-    dept:    { ko: "CVC / M&A", en: "CVC / M&A", ja: "CVC / M&A" },
-    email:        "justin.ha@galaxyuniverse.ai",
-    phone:        "+82-010-7727-3028",
-    rememberLink: "",
-    profile:   "photo/profile.jpg",
-    logo:      "photo/logo.png",
-    logoSmall: "photo/logo_small.png",
-    cardFront: "photo/card_front.jpg",
-    cardBack:  "photo/card_back.jpg",
-  };
-
-  /* ── Load form (localStorage 없으면 기본값으로 채움) ── */
+  // 폼 로드 (data.json에서)
   function loadForm() {
-    const raw = localStorage.getItem(STORE + '_data');
-    const saved = raw ? JSON.parse(raw) : {};
-    const d = { ...CARD_DATA_DEFAULT, ...saved,
-      company: { ...CARD_DATA_DEFAULT.company, ...(saved.company || {}) },
-      name:    { ...CARD_DATA_DEFAULT.name,    ...(saved.name    || {}) },
-      title:   { ...CARD_DATA_DEFAULT.title,   ...(saved.title   || {}) },
-      dept:    { ...CARD_DATA_DEFAULT.dept,    ...(saved.dept    || {}) },
-    };
+    fetch('https://raw.githubusercontent.com/' + OWNER + '/' + REPO + '/' + BRANCH + '/data.json?t=' + Date.now())
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .then(function(d) {
+        if (!d) d = DEFAULTS;
+        var data = Object.assign({}, DEFAULTS, d);
+        // 중첩 객체 병합
+        ['company','name','title','dept'].forEach(function(f) {
+          data[f] = Object.assign({}, DEFAULTS[f], d[f] || {});
+        });
+        fillForm(data);
+      })
+      .catch(function() { fillForm(DEFAULTS); });
+  }
 
-    [['company','ko'],['company','en'],['company','ja'],
-     ['name','ko'],['name','en'],['name','ja'],
-     ['title','ko'],['title','en'],['title','ja'],
-     ['dept','ko'],['dept','en'],['dept','ja']
-    ].forEach(([f,l]) => {
-      const el = document.getElementById(`${f}-${l}`);
-      if (el && d[f]?.[l]) el.value = d[f][l];
+  function fillForm(d) {
+    ['company','name','title','dept'].forEach(function(f) {
+      ['ko','en','ja'].forEach(function(l) {
+        var el = document.getElementById(f + '-' + l);
+        if (el && d[f] && d[f][l]) el.value = d[f][l];
+      });
     });
-    ['email','phone','rememberLink'].forEach(k => {
-      const el = document.getElementById(k);
+    ['email','phone','rememberLink'].forEach(function(k) {
+      var el = document.getElementById(k);
       if (el && d[k]) el.value = d[k];
     });
   }
 
-  /* ── Step indicator ─────────────────────────────── */
+  // Step indicator
   function setStep(id, state) {
-    const el = document.getElementById(id);
-    el.className = `progress-step ${state}`;
-    const icons = {
+    var el = document.getElementById(id);
+    el.className = 'progress-step ' + state;
+    var icons = {
       active: '<circle cx="12" cy="12" r="4" opacity=".5"/>',
       done:   '<path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>',
       error:  '<path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>',
@@ -402,135 +376,120 @@
     el.querySelector('.step-icon').innerHTML = icons[state] || icons.active;
   }
 
-  /* ── Unicode escape (한글 깨짐 방지) ──────────────── */
-  function esc(str) {
-    if (!str) return '';
-    return str.split('').map(function(c) {
-      var code = c.charCodeAt(0);
-      if (code > 127) {
-        var hex = code.toString(16).padStart(4,'0');
-        return '\\u' + hex;
-      }
-      return c;
-    }).join('');
-  }
+  // 배포
+  document.getElementById('saveBtn').onclick = function() { deploy(); };
 
-  /* ── Deploy ─────────────────────────────────────── */
-  async function deploy() {
+  function v(id) { return (document.getElementById(id) || {}).value && document.getElementById(id).value.trim() || ''; }
+
+  function deploy() {
     if (!token) { showToast('먼저 GitHub 토큰을 입력해주세요.', true); return; }
-
-    const btn  = document.getElementById('saveBtn');
-    const text = document.getElementById('saveBtnText');
-    const prog = document.getElementById('progress');
-    btn.disabled = true; text.textContent = '배포 중...';
+    var btn = document.getElementById('saveBtn');
+    var btnText = document.getElementById('saveBtnText');
+    var prog = document.getElementById('progress');
+    btn.disabled = true; btnText.textContent = '배포 중...';
     prog.classList.add('show');
     setStep('step1','active'); setStep('step2',''); setStep('step3','');
 
-    const d = {
-      company: { ko: v('company-ko'), en: v('company-en'), ja: v('company-ja') },
-      name:    { ko: v('name-ko'),    en: v('name-en'),    ja: v('name-ja')    },
-      title:   { ko: v('title-ko'),   en: v('title-en'),   ja: v('title-ja')   },
-      dept:    { ko: v('dept-ko'),    en: v('dept-en'),    ja: v('dept-ja')    },
-      email:        v('email'),
-      phone:        v('phone'),
-      rememberLink: v('rememberLink'),
-    };
+    var photoPaths = {};
+    var existingPaths = Object.assign({}, DEFAULTS);
 
-    localStorage.setItem(STORE + '_data', JSON.stringify(d));
+    // Step 1: 사진 업로드
+    var photoUploadKeys = [
+      { key: 'profile',   path: 'photo/profile' },
+      { key: 'logo',      path: 'photo/logo' },
+      { key: 'logoSmall', path: 'photo/logo_small' },
+      { key: 'cardFront', path: 'photo/card_front' },
+      { key: 'cardBack',  path: 'photo/card_back' },
+    ];
 
-    const photoPaths = {};
+    // 기존 data.json에서 경로 읽어오기
+    fetch('https://raw.githubusercontent.com/' + OWNER + '/' + REPO + '/' + BRANCH + '/data.json?t=' + Date.now())
+      .then(function(r) { return r.ok ? r.json() : {}; })
+      .then(function(existing) {
+        existingPaths = Object.assign({}, DEFAULTS, existing);
+        return uploadPhotosSequentially(photoUploadKeys, 0, photoPaths);
+      })
+      .then(function() {
+        setStep('step1','done');
+        setStep('step2','active');
 
-    try {
-      // Step 1: Upload photos (새로 선택한 것만)
-      const photoKeys = [
-        { key: 'profile',   path: 'photo/profile' },
-        { key: 'logo',      path: 'photo/logo' },
-        { key: 'logoSmall', path: 'photo/logo_small' },
-        { key: 'cardFront', path: 'photo/card_front' },
-        { key: 'cardBack',  path: 'photo/card_back' },
-      ];
-      for (const { key, path } of photoKeys) {
-        if (photos[key]) {
-          const ext      = getExt(photos[key].dataUrl);
-          const fullPath = `${path}.${ext}`;
-          const existing = await getFileSHA(fullPath);
-          await uploadFile(fullPath, dataUrlToBase64(photos[key].dataUrl), `upload ${key}`, existing?.sha);
-          photoPaths[key] = fullPath;
-        }
-      }
-      setStep('step1','done');
+        // Step 2: data.json 업데이트
+        var newData = {
+          company: { ko: v('company-ko'), en: v('company-en'), ja: v('company-ja') },
+          name:    { ko: v('name-ko'),    en: v('name-en'),    ja: v('name-ja') },
+          title:   { ko: v('title-ko'),   en: v('title-en'),   ja: v('title-ja') },
+          dept:    { ko: v('dept-ko'),    en: v('dept-en'),    ja: v('dept-ja') },
+          email:        v('email')        || existingPaths.email,
+          phone:        v('phone')        || existingPaths.phone,
+          rememberLink: v('rememberLink') || existingPaths.rememberLink,
+          profile:   photoPaths.profile   || existingPaths.profile,
+          logo:      photoPaths.logo      || existingPaths.logo,
+          logoSmall: photoPaths.logoSmall || existingPaths.logoSmall,
+          cardFront: photoPaths.cardFront || existingPaths.cardFront,
+          cardBack:  photoPaths.cardBack  || existingPaths.cardBack,
+        };
 
-      // Step 2: index.html CARD_DATA 업데이트
-      setStep('step2','active');
-      const indexFile = await getFileSHA('index.html');
-      if (!indexFile) throw new Error('index.html을 찾을 수 없습니다.');
+        // 빈값이면 기존값 유지
+        ['company','name','title','dept'].forEach(function(f) {
+          ['ko','en','ja'].forEach(function(l) {
+            if (!newData[f][l]) newData[f][l] = existingPaths[f] ? existingPaths[f][l] : DEFAULTS[f][l];
+          });
+        });
 
-      let html = atob(indexFile.content.replace(/\n/g,''));
+        var jsonStr = JSON.stringify(newData, null, 2);
+        var b64 = btoa(unescape(encodeURIComponent(jsonStr)));
 
-      // 기존 index.html에서 사진 경로 추출 → 새로 업로드 안 했으면 기존 경로 유지
-      const existingMatch = html.match(/profile:\s*["']([^"']+)["'][\s\S]*?logo:\s*["']([^"']+)["'][\s\S]*?logoSmall:\s*["']([^"']*?)["'][\s\S]*?cardFront:\s*["']([^"']+)["'][\s\S]*?cardBack:\s*["']([^"']+)["']/);
-      const existingPaths = {
-        profile:   existingMatch?.[1] || CARD_DATA_DEFAULT.profile,
-        logo:      existingMatch?.[2] || CARD_DATA_DEFAULT.logo,
-        logoSmall: existingMatch?.[3] || CARD_DATA_DEFAULT.logoSmall,
-        cardFront: existingMatch?.[4] || CARD_DATA_DEFAULT.cardFront,
-        cardBack:  existingMatch?.[5] || CARD_DATA_DEFAULT.cardBack,
-      };
-
-      const block = `/* %%CARD_DATA_START%% */
-  const CARD_DATA = {
-    company: { ko: "${esc(d.company?.ko||'')}", en: "${esc(d.company?.en||'')}", ja: "${esc(d.company?.ja||'')}" },
-    name:    { ko: "${esc(d.name?.ko||'')}",    en: "${esc(d.name?.en||'')}",    ja: "${esc(d.name?.ja||'')}" },
-    title:   { ko: "${esc(d.title?.ko||'')}",   en: "${esc(d.title?.en||'')}",   ja: "${esc(d.title?.ja||'')}" },
-    dept:    { ko: "${esc(d.dept?.ko||'')}",    en: "${esc(d.dept?.en||'')}",    ja: "${esc(d.dept?.ja||'')}" },
-    email:        "${esc(d.email||'')}",
-    phone:        "${esc(d.phone||'')}",
-    rememberLink: "${esc(d.rememberLink||'')}",
-    profile:    "${photoPaths.profile    || existingPaths.profile}",
-    logo:       "${photoPaths.logo       || existingPaths.logo}",
-    logoSmall:  "${photoPaths.logoSmall  || existingPaths.logoSmall}",
-    cardFront:  "${photoPaths.cardFront  || existingPaths.cardFront}",
-    cardBack:   "${photoPaths.cardBack   || existingPaths.cardBack}",
-  };
-  /* %%CARD_DATA_END%% */`;
-
-      html = html.replace(/\/\* %%CARD_DATA_START%% \*\/[\s\S]*?\/\* %%CARD_DATA_END%% \*\//, block);
-      // data-cfasync="false" 유지 보장
-      html = html.replace(/<script(?! data-cfasync)([^>]*)>\s*const CARD_DATA/, '<script data-cfasync="false"$1>\n  const CARD_DATA');
-      html = html.replace(/<script>\s*const pages/, '<script data-cfasync="false">\n  const pages');
-      setStep('step2','done');
-
-      // Step 3: index.html push
-      setStep('step3','active');
-      // 한글 깨짐 방지 안전한 base64 인코딩
-      const b64 = btoa(unescape(encodeURIComponent(html)));
-      await uploadFile('index.html', b64, 'update namecard content', indexFile.sha);
-      setStep('step3','done');
-
-      showToast('✅ GitHub Pages 배포 완료!');
-      setTimeout(() => { window.location.href = 'index.html'; }, 1500);
-
-    } catch(e) {
-      const steps = ['step1','step2','step3'];
-      steps.forEach(s => { if (document.getElementById(s).classList.contains('active')) setStep(s,'error'); });
-      showToast('❌ ' + e.message, true);
-      console.error(e);
-    } finally {
-      btn.disabled = false; text.textContent = '저장 및 배포';
-    }
+        return getFileSHA('data.json').then(function(existing) {
+          return uploadFile('data.json', b64, 'update namecard data', existing ? existing.sha : null);
+        });
+      })
+      .then(function() {
+        setStep('step2','done');
+        setStep('step3','active');
+        // index.html은 건드리지 않음!
+        setTimeout(function() {
+          setStep('step3','done');
+          showToast('✅ 배포 완료! 1~2분 후 반영됩니다.');
+          setTimeout(function() { window.location.href = 'index.html'; }, 2000);
+        }, 1000);
+      })
+      .catch(function(e) {
+        ['step1','step2','step3'].forEach(function(s) {
+          if (document.getElementById(s).classList.contains('active')) setStep(s,'error');
+        });
+        showToast('❌ ' + e.message, true);
+        console.error(e);
+      })
+      .finally(function() {
+        btn.disabled = false; btnText.textContent = '저장 및 배포';
+      });
   }
 
-  function v(id) { return document.getElementById(id)?.value.trim() || ''; }
+  function uploadPhotosSequentially(keys, idx, photoPaths) {
+    if (idx >= keys.length) return Promise.resolve();
+    var item = keys[idx];
+    if (!photos[item.key]) return uploadPhotosSequentially(keys, idx + 1, photoPaths);
+    var ext = getExt(photos[item.key].dataUrl);
+    var fullPath = item.path + '.' + ext;
+    return getFileSHA(fullPath)
+      .then(function(existing) {
+        return uploadFile(fullPath, dataUrlToBase64(photos[item.key].dataUrl), 'upload ' + item.key, existing ? existing.sha : null);
+      })
+      .then(function() {
+        photoPaths[item.key] = fullPath;
+        return uploadPhotosSequentially(keys, idx + 1, photoPaths);
+      });
+  }
 
-  function showToast(msg, isError = false) {
-    const t = document.getElementById('toast');
+  function showToast(msg, isError) {
+    var t = document.getElementById('toast');
     t.textContent = msg;
     t.className = 'toast show' + (isError ? ' error' : '');
-    setTimeout(() => t.className = 'toast', 3000);
+    setTimeout(function() { t.className = 'toast'; }, 3000);
   }
 
-  /* ── Init ───────────────────────────────────────── */
-  const savedToken = localStorage.getItem(STORE + '_token');
+  // 초기화
+  var savedToken = localStorage.getItem(STORE + '_token');
   if (savedToken) {
     document.getElementById('tokenInput').value = savedToken;
     token = savedToken;
