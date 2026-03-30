@@ -344,10 +344,25 @@
   }
 
   /* ── Load form from localStorage ───────────────── */
+  const CARD_DATA_DEFAULT = {
+    company: { ko: "갤럭시코퍼레이션", en: "Galaxy Corporation", ja: "ギャラクシーコーポレーション" },
+    name:    { ko: "하형석", en: "Justin Ha", ja: "ハ・ヒョンソク (河 炯 碩)" },
+    title:   { ko: "이사 / CEO Staff", en: "Director / CEO Staff", ja: "取締役 / CEO スタッフ" },
+    dept:    { ko: "CVC / M&A", en: "CVC / M&A", ja: "CVC / M&A" },
+    email:   "justin.ha@galaxyuniverse.ai",
+    phone:   "+82-010-7727-3028",
+    rememberLink: "",
+    profile:   "photo/profile.jpg",
+    logo:      "photo/logo.png",
+    cardFront: "photo/card_front.jpg",
+    cardBack:  "photo/card_back.jpg",
+  };
+
   function loadForm() {
     const raw = localStorage.getItem(STORE + '_data');
-    if (!raw) return;
-    const d = JSON.parse(raw);
+    const saved = raw ? JSON.parse(raw) : {};
+    const d = { ...CARD_DATA_DEFAULT, ...saved };
+
     [['company','ko'],['company','en'],['company','ja'],
      ['name','ko'],['name','en'],['name','ja'],
      ['title','ko'],['title','en'],['title','ja'],
@@ -428,6 +443,15 @@
       let html = atob(indexFile.content.replace(/\n/g,''));
 
       const block = `/* %%CARD_DATA_START%% */
+const existingMatch = html.match(/profile:\s*"([^"]*)"[\s\S]*?logo:\s*"([^"]*)"[\s\S]*?cardFront:\s*"([^"]*)"[\s\S]*?cardBack:\s*"([^"]*)"/);
+    const existingPaths = {
+      profile:   existingMatch?.[1] || 'photo/profile.jpg',
+      logo:      existingMatch?.[2] || 'photo/logo.png',
+      cardFront: existingMatch?.[3] || 'photo/card_front.jpg',
+      cardBack:  existingMatch?.[4] || 'photo/card_back.jpg',
+    };
+
+    const block = `/* %%CARD_DATA_START%% */
   const CARD_DATA = {
     company: { ko: ${JSON.stringify(d.company?.ko||'')}, en: ${JSON.stringify(d.company?.en||'')}, ja: ${JSON.stringify(d.company?.ja||'')} },
     name:    { ko: ${JSON.stringify(d.name?.ko||'')},    en: ${JSON.stringify(d.name?.en||'')},    ja: ${JSON.stringify(d.name?.ja||'')} },
@@ -436,10 +460,10 @@
     email:        ${JSON.stringify(d.email||'')},
     phone:        ${JSON.stringify(d.phone||'')},
     rememberLink: ${JSON.stringify(d.rememberLink||'')},
-    profile:   ${JSON.stringify(photoPaths.profile   || '')},
-    logo:      ${JSON.stringify(photoPaths.logo      || '')},
-    cardFront: ${JSON.stringify(photoPaths.cardFront || '')},
-    cardBack:  ${JSON.stringify(photoPaths.cardBack  || '')},
+    profile:   ${JSON.stringify(photoPaths.profile   || existingPaths.profile)},
+    logo:      ${JSON.stringify(photoPaths.logo      || existingPaths.logo)},
+    cardFront: ${JSON.stringify(photoPaths.cardFront || existingPaths.cardFront)},
+    cardBack:  ${JSON.stringify(photoPaths.cardBack  || existingPaths.cardBack)},
   };
   /* %%CARD_DATA_END%% */`;
 
