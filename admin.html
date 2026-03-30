@@ -405,9 +405,13 @@
   /* ── Unicode escape (한글 깨짐 방지) ──────────────── */
   function esc(str) {
     if (!str) return '';
-    return str.split('').map(c => {
-      const code = c.charCodeAt(0);
-      return code > 127 ? '\u' + code.toString(16).padStart(4,'0') : c;
+    return str.split('').map(function(c) {
+      var code = c.charCodeAt(0);
+      if (code > 127) {
+        var hex = code.toString(16).padStart(4,'0');
+        return '\\u' + hex;
+      }
+      return c;
     }).join('');
   }
 
