@@ -140,12 +140,21 @@
         </div>
       </div>
       <div class="photo-upload">
-        <label class="lbl">회사 로고</label>
+        <label class="lbl">회사 로고 (상단)</label>
         <div class="photo-drop" id="drop-logo">
           <input type="file" accept="image/*" onchange="handlePhoto(this,'logo')" />
           <span class="clear-btn" onclick="clearPhoto(event,'logo')">×</span>
-          <div class="placeholder" id="ph-logo"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>회사 로고</div>
+          <div class="placeholder" id="ph-logo"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>상단 로고</div>
           <img class="preview" id="img-logo" style="display:none" />
+        </div>
+      </div>
+      <div class="photo-upload">
+        <label class="lbl">회사 로고 (프로필)</label>
+        <div class="photo-drop" id="drop-logoSmall">
+          <input type="file" accept="image/*" onchange="handlePhoto(this,'logoSmall')" />
+          <span class="clear-btn" onclick="clearPhoto(event,'logoSmall')">×</span>
+          <div class="placeholder" id="ph-logoSmall"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>프로필 로고</div>
+          <img class="preview" id="img-logoSmall" style="display:none" />
         </div>
       </div>
       <div class="photo-upload wide">
@@ -351,6 +360,7 @@
     rememberLink: "",
     profile:   "photo/profile.jpg",
     logo:      "photo/logo.png",
+    logoSmall: "photo/logo_small.png",
     cardFront: "photo/card_front.jpg",
     cardBack:  "photo/card_back.jpg",
   };
@@ -422,6 +432,7 @@
       const photoKeys = [
         { key: 'profile',   path: 'photo/profile' },
         { key: 'logo',      path: 'photo/logo' },
+        { key: 'logoSmall', path: 'photo/logo_small' },
         { key: 'cardFront', path: 'photo/card_front' },
         { key: 'cardBack',  path: 'photo/card_back' },
       ];
@@ -444,12 +455,13 @@
       let html = atob(indexFile.content.replace(/\n/g,''));
 
       // 기존 index.html에서 사진 경로 추출 → 새로 업로드 안 했으면 기존 경로 유지
-      const existingMatch = html.match(/profile:\s*["']([^"']+)["'][\s\S]*?logo:\s*["']([^"']+)["'][\s\S]*?cardFront:\s*["']([^"']+)["'][\s\S]*?cardBack:\s*["']([^"']+)["']/);
+      const existingMatch = html.match(/profile:\s*["']([^"']+)["'][\s\S]*?logo:\s*["']([^"']+)["'][\s\S]*?logoSmall:\s*["']([^"']*?)["'][\s\S]*?cardFront:\s*["']([^"']+)["'][\s\S]*?cardBack:\s*["']([^"']+)["']/);
       const existingPaths = {
         profile:   existingMatch?.[1] || CARD_DATA_DEFAULT.profile,
         logo:      existingMatch?.[2] || CARD_DATA_DEFAULT.logo,
-        cardFront: existingMatch?.[3] || CARD_DATA_DEFAULT.cardFront,
-        cardBack:  existingMatch?.[4] || CARD_DATA_DEFAULT.cardBack,
+        logoSmall: existingMatch?.[3] || CARD_DATA_DEFAULT.logoSmall,
+        cardFront: existingMatch?.[4] || CARD_DATA_DEFAULT.cardFront,
+        cardBack:  existingMatch?.[5] || CARD_DATA_DEFAULT.cardBack,
       };
 
       const block = `/* %%CARD_DATA_START%% */
@@ -461,10 +473,11 @@
     email:        ${JSON.stringify(d.email||'')},
     phone:        ${JSON.stringify(d.phone||'')},
     rememberLink: ${JSON.stringify(d.rememberLink||'')},
-    profile:   ${JSON.stringify(photoPaths.profile   || existingPaths.profile)},
-    logo:      ${JSON.stringify(photoPaths.logo      || existingPaths.logo)},
-    cardFront: ${JSON.stringify(photoPaths.cardFront || existingPaths.cardFront)},
-    cardBack:  ${JSON.stringify(photoPaths.cardBack  || existingPaths.cardBack)},
+    profile:    ${JSON.stringify(photoPaths.profile    || existingPaths.profile)},
+    logo:       ${JSON.stringify(photoPaths.logo       || existingPaths.logo)},
+    logoSmall:  ${JSON.stringify(photoPaths.logoSmall  || existingPaths.logoSmall)},
+    cardFront:  ${JSON.stringify(photoPaths.cardFront  || existingPaths.cardFront)},
+    cardBack:   ${JSON.stringify(photoPaths.cardBack   || existingPaths.cardBack)},
   };
   /* %%CARD_DATA_END%% */`;
 
