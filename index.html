@@ -609,11 +609,28 @@
     dots.forEach((d, i) => d.classList.toggle('active', i === idx));
   });
 
-  /* ── Load from localStorage ─────────────────────── */
+  /* ── 하드코딩 기본값 (GitHub Pages용) ──────────────
+     edit.html에서 저장하면 localStorage가 이 값을 덮어씁니다.
+     사진은 base64 문자열 또는 파일 경로로 입력하세요.
+  ─────────────────────────────────────────────────── */
+  const CARD_DATA = {
+    company: { ko: 'YOUR COMPANY NAME', en: 'YOUR COMPANY NAME', ja: 'YOUR COMPANY NAME' },
+    name:    { ko: '홍길동', en: 'Gildong Hong', ja: 'ホン・ギルドン' },
+    title:   { ko: '대표이사', en: 'Chief Executive Officer', ja: '代表取締役' },
+    dept:    { ko: '경영지원팀', en: 'Management Support', ja: '経営支援チーム' },
+    email:   'your@email.com',
+    phone:   '010-0000-0000',
+    rememberLink: '',
+    profile:   '',   // base64 또는 'photo/profile.jpg'
+    logo:      '',   // base64 또는 'photo/logo.png'
+    cardFront: '',   // base64 또는 'photo/card_front.jpg'
+    cardBack:  '',   // base64 또는 'photo/card_back.jpg'
+  };
+
+  /* ── Load from localStorage (없으면 CARD_DATA 사용) ── */
   (function loadData() {
     const raw = localStorage.getItem('namecard_data');
-    if (!raw) return;
-    const d = JSON.parse(raw);
+    const d = raw ? { ...CARD_DATA, ...JSON.parse(raw) } : CARD_DATA;
 
     // Photos
     function setImg(imgId, phId, src) {
