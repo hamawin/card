@@ -473,8 +473,6 @@
 
       // Step 3: index.html push
       setStep('step3','active');
-      const encoder = new TextEncoder();
-      const bytes   = encoder.encode(html);
       const b64 = btoa(unescape(encodeURIComponent(html)));
       await uploadFile('index.html', b64, 'update namecard content', indexFile.sha);
       setStep('step3','done');
