@@ -9,96 +9,88 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --black:   #000000; --dark: #0a0a0a; --card: #111111;
-      --border:  #1e1e1e; --green: #39ff14; --purple: #9b30ff;
-      --purple2: #c77dff; --white: #f0f0f0; --gray: #888888;
+      --black:#000000; --dark:#0a0a0a; --card:#111111; --border:#1e1e1e;
+      --green:#39ff14; --purple:#9b30ff; --purple2:#c77dff; --white:#f0f0f0; --gray:#888888;
     }
-    html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Outfit', sans-serif; background: var(--black); color: var(--white); }
-    .glow-green { position: fixed; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(57,255,20,.10) 0%, transparent 70%); top: -120px; left: -120px; pointer-events: none; z-index: 0; }
-    .glow-purple { position: fixed; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(155,48,255,.09) 0%, transparent 70%); bottom: -160px; right: -160px; pointer-events: none; z-index: 0; }
-    .pages { position: relative; z-index: 1; display: flex; width: 100%; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-    .pages::-webkit-scrollbar { display: none; }
-    .page { flex: 0 0 100%; width: 100%; height: 100%; scroll-snap-align: start; overflow-y: auto; scrollbar-width: none; display: flex; flex-direction: column; align-items: center; }
-    .page::-webkit-scrollbar { display: none; }
-    .page-inner { width: 100%; max-width: 480px; padding: 0 20px 50px; display: flex; flex-direction: column; gap: 22px; }
-    .page-dots { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 100; }
-    .dot { width: 6px; height: 6px; border-radius: 3px; background: var(--border); transition: all .3s; cursor: pointer; }
-    .dot.active { width: 22px; background: var(--green); box-shadow: 0 0 8px var(--green); }
-    .topbar { display: flex; align-items: center; justify-content: space-between; padding-top: 44px; }
-    .logo-tag { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--green); border: 1px solid var(--green); padding: 4px 12px; border-radius: 20px; box-shadow: 0 0 10px rgba(57,255,20,.25); }
-    .nfc-badge { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--gray); letter-spacing: .1em; }
-    .nfc-badge svg { width: 16px; height: 16px; fill: var(--purple); }
-    .company-block { display: flex; align-items: center; justify-content: center; background: var(--card); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; position: relative; padding: 18px; }
-    .company-block::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--green), var(--purple)); z-index: 1; }
-    .company-logo-only { width: 100%; height: 120px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-    .company-logo-placeholder { display: flex; align-items: center; justify-content: center; color: #333; }
-    .company-logo-placeholder svg { width: 36px; height: 36px; fill: #2a2a2a; }
-    .company-name-wrap .sub { font-size: 10px; color: var(--gray); letter-spacing: .15em; text-transform: uppercase; margin-bottom: 3px; }
-    .company-name-wrap .name { font-size: 18px; font-weight: 700; background: linear-gradient(90deg, var(--green), var(--purple2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .profile-hero { background: var(--card); border: 1px solid var(--border); border-radius: 28px; padding: 40px 28px 36px; display: flex; flex-direction: column; align-items: center; gap: 22px; position: relative; overflow: hidden; }
-    .profile-hero::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, rgba(155,48,255,.08) 0%, transparent 60%); pointer-events: none; }
-    .avatar-ring { position: relative; width: 120px; height: 120px; }
-    .avatar-ring::before { content: ''; position: absolute; inset: -3px; border-radius: 50%; background: conic-gradient(var(--green), var(--purple), var(--green)); animation: spin 6s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .avatar-ring .inner { position: absolute; inset: 3px; border-radius: 50%; background: var(--black); overflow: hidden; z-index: 1; }
-    .avatar-ring .inner img, .avatar-ring .inner .placeholder { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-    .avatar-ring .inner .placeholder { display: flex; align-items: center; justify-content: center; background: #151515; }
-    .avatar-ring .inner .placeholder svg { width: 44px; height: 44px; fill: #333; }
-    /* hero card - horizontal layout */
-    .hero-card-inner { display: flex; align-items: stretch; gap: 0; width: 100%; border-radius: 20px; overflow: hidden; background: #0d0d0d; min-height: 160px; }
-    .hero-photo-wrap { width: 42%; flex-shrink: 0; position: relative; overflow: hidden; background: #151515; }
-    .hero-photo-wrap .placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #151515; }
-    .hero-photo-wrap .placeholder svg { width: 44px; height: 44px; fill: #333; }
-    .hero-info-wrap { flex: 1; padding: 22px 18px; display: flex; flex-direction: column; justify-content: center; gap: 6px; }
-    .hero-info-wrap .person-name { font-size: 26px; font-weight: 900; letter-spacing: -.02em; color: #fff; line-height: 1.15; }
-    .hero-info-wrap .person-title { font-size: 12px; color: var(--gray); font-weight: 300; letter-spacing: .03em; }
-    .hero-company-row { display: flex; align-items: center; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #1e1e1e; }
-    .hero-logo-wrap { width: 80px; height: 28px; border-radius: 6px; background: transparent; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
-    .remember-btn { display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, rgba(155,48,255,.15), rgba(57,255,20,.07)); border: 1px solid rgba(155,48,255,.45); border-radius: 20px; padding: 20px 22px; text-decoration: none; transition: all .25s; position: relative; overflow: hidden; }
-    .remember-btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(155,48,255,.08), rgba(57,255,20,.04)); opacity: 0; transition: opacity .25s; }
-    .remember-btn:hover::before { opacity: 1; }
-    .remember-btn:hover { border-color: rgba(155,48,255,.7); box-shadow: 0 0 30px rgba(155,48,255,.2); }
-    .r-left { display: flex; align-items: center; gap: 14px; }
-    .r-icon { width: 48px; height: 48px; border-radius: 14px; background: linear-gradient(135deg, var(--purple), #6a0dad); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(155,48,255,.35); flex-shrink: 0; }
-    .r-icon svg { width: 22px; height: 22px; fill: #fff; }
-    .r-text .rtag { font-size: 10px; color: var(--purple2); letter-spacing: .15em; text-transform: uppercase; margin-bottom: 3px; }
-    .r-text .rtitle { font-size: 15px; font-weight: 600; }
-    .r-text .rsub { font-size: 11px; color: var(--gray); margin-top: 2px; }
-    .r-arrow { width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(155,48,255,.4); display: flex; align-items: center; justify-content: center; color: var(--purple2); font-size: 18px; flex-shrink: 0; transition: transform .2s; }
-    .remember-btn:hover .r-arrow { transform: translateX(3px); }
-    .swipe-hint { display: flex; align-items: center; justify-content: center; gap: 8px; color: #333; font-size: 11px; letter-spacing: .1em; padding-bottom: 10px; }
-    .swipe-hint svg { width: 16px; height: 16px; fill: #333; }
-    .lang-btn { font-family: 'Outfit', sans-serif; font-size: 11px; letter-spacing: .1em; padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--gray); cursor: pointer; transition: all .2s; }
-    .lang-btn.active { border-color: var(--green); color: var(--green); box-shadow: 0 0 10px rgba(57,255,20,.2); }
-    .flip-label { display: flex; align-items: center; justify-content: space-between; }
-    .flip-tip { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--purple2); }
-    .flip-tip svg { width: 13px; height: 13px; fill: var(--purple2); }
-    .card-3d-wrap { perspective: 1200px; width: 100%; aspect-ratio: 9/5; cursor: pointer; }
-    .card-3d-inner { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform .7s cubic-bezier(.4,0,.2,1); border-radius: 18px; }
-    .card-3d-wrap.flipped .card-3d-inner { transform: rotateY(180deg); }
-    .card-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 18px; overflow: hidden; border: 1px solid var(--border); }
-    .card-face img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .card-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 10px; background: linear-gradient(135deg, #111, #1a1a1a); color: var(--gray); font-size: 13px; text-align: center; }
-    .card-placeholder svg { width: 30px; height: 30px; fill: #2a2a2a; }
-    .card-back { transform: rotateY(180deg); }
-    .dl-btn { display: flex; align-items: center; gap: 6px; background: transparent; border: 1px solid var(--border); border-radius: 10px; padding: 5px 12px; font-family: 'Outfit', sans-serif; font-size: 11px; color: var(--gray); cursor: pointer; text-decoration: none; transition: all .2s; flex-shrink: 0; }
-    .dl-btn:hover { border-color: var(--green); color: var(--green); }
-    .dl-btn svg { width: 13px; height: 13px; fill: currentColor; }
-    .info-card { background: var(--card); border: 1px solid var(--border); border-radius: 22px; overflow: hidden; }
-    .info-row { display: flex; align-items: center; gap: 16px; padding: 15px 20px; border-bottom: 1px solid var(--border); text-decoration: none; transition: background .2s; }
-    .info-row:last-child { border-bottom: none; }
-    .info-row:hover { background: rgba(255,255,255,.025); }
-    .info-icon { width: 38px; height: 38px; border-radius: 11px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .info-icon svg { width: 17px; height: 17px; }
-    .info-icon.g { background: rgba(57,255,20,.1); }
-    .info-icon.g svg { fill: var(--green); }
-    .info-icon.p { background: rgba(155,48,255,.1); }
-    .info-icon.p svg { fill: var(--purple2); }
-    .info-text .lbl { font-size: 10px; color: var(--gray); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 2px; }
-    .info-text .val { font-size: 14px; color: var(--white); }
-    .info-arrow { color: #2a2a2a; font-size: 18px; margin-left: auto; flex-shrink: 0; }
-    .fade-up { opacity: 0; transform: translateY(16px); animation: fadeup .45s ease forwards; }
-    @keyframes fadeup { to { opacity: 1; transform: translateY(0); } }
+    html, body { width:100%; height:100%; overflow:hidden; font-family:'Outfit',sans-serif; background:var(--black); color:var(--white); }
+    .glow-green { position:fixed; width:500px; height:500px; border-radius:50%; background:radial-gradient(circle,rgba(57,255,20,.10) 0%,transparent 70%); top:-120px; left:-120px; pointer-events:none; z-index:0; }
+    .glow-purple { position:fixed; width:600px; height:600px; border-radius:50%; background:radial-gradient(circle,rgba(155,48,255,.09) 0%,transparent 70%); bottom:-160px; right:-160px; pointer-events:none; z-index:0; }
+    .pages { position:relative; z-index:1; display:flex; width:100%; height:100%; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+    .pages::-webkit-scrollbar { display:none; }
+    .page { flex:0 0 100%; width:100%; height:100%; scroll-snap-align:start; overflow-y:auto; scrollbar-width:none; display:flex; flex-direction:column; align-items:center; }
+    .page::-webkit-scrollbar { display:none; }
+    .page-inner { width:100%; max-width:480px; padding:0 20px 50px; display:flex; flex-direction:column; gap:22px; }
+    .page-dots { position:fixed; bottom:22px; left:50%; transform:translateX(-50%); display:flex; gap:8px; z-index:100; }
+    .dot { width:6px; height:6px; border-radius:3px; background:var(--border); transition:all .3s; cursor:pointer; }
+    .dot.active { width:22px; background:var(--green); box-shadow:0 0 8px var(--green); }
+    .topbar { display:flex; align-items:center; justify-content:space-between; padding-top:44px; }
+    .logo-tag { font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--green); border:1px solid var(--green); padding:4px 12px; border-radius:20px; box-shadow:0 0 10px rgba(57,255,20,.25); }
+    .nfc-badge { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--gray); letter-spacing:.1em; }
+    .nfc-badge svg { width:16px; height:16px; fill:var(--purple); }
+    /* Company block */
+    .company-block { display:flex; align-items:center; justify-content:center; background:var(--card); border:1px solid var(--border); border-radius:20px; overflow:hidden; position:relative; padding:18px; }
+    .company-block::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--green),var(--purple)); z-index:1; }
+    .company-logo-only { width:100%; height:120px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .company-logo-placeholder { display:flex; align-items:center; justify-content:center; color:#333; }
+    .company-logo-placeholder svg { width:36px; height:36px; fill:#2a2a2a; }
+    /* Hero card */
+    .profile-hero { background:var(--card); border:1px solid var(--border); border-radius:28px; overflow:hidden; }
+    .hero-card-inner { display:flex; align-items:stretch; width:100%; min-height:160px; }
+    .hero-photo-wrap { width:42%; flex-shrink:0; position:relative; overflow:hidden; background:#151515; }
+    .hero-photo-wrap .placeholder { width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:#151515; }
+    .hero-photo-wrap .placeholder svg { width:44px; height:44px; fill:#333; }
+    .hero-info-wrap { flex:1; padding:22px 18px; display:flex; flex-direction:column; justify-content:center; gap:6px; }
+    .hero-info-wrap .person-name { font-size:26px; font-weight:900; letter-spacing:-.02em; color:#fff; line-height:1.15; }
+    .hero-info-wrap .person-title { font-size:12px; color:var(--gray); font-weight:300; letter-spacing:.03em; }
+    .hero-company-row { display:flex; align-items:center; margin-top:12px; padding-top:12px; border-top:1px solid #1e1e1e; }
+    .hero-logo-wrap { width:80px; height:28px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    /* Remember */
+    .remember-btn { display:flex; align-items:center; justify-content:space-between; background:linear-gradient(135deg,rgba(155,48,255,.15),rgba(57,255,20,.07)); border:1px solid rgba(155,48,255,.45); border-radius:20px; padding:20px 22px; text-decoration:none; transition:all .25s; position:relative; overflow:hidden; }
+    .remember-btn::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(155,48,255,.08),rgba(57,255,20,.04)); opacity:0; transition:opacity .25s; }
+    .remember-btn:hover::before { opacity:1; }
+    .remember-btn:hover { border-color:rgba(155,48,255,.7); box-shadow:0 0 30px rgba(155,48,255,.2); }
+    .r-left { display:flex; align-items:center; gap:14px; }
+    .r-icon { width:48px; height:48px; border-radius:14px; background:linear-gradient(135deg,var(--purple),#6a0dad); display:flex; align-items:center; justify-content:center; box-shadow:0 0 20px rgba(155,48,255,.35); flex-shrink:0; }
+    .r-icon svg { width:22px; height:22px; fill:#fff; }
+    .r-text .rtag { font-size:10px; color:var(--purple2); letter-spacing:.15em; text-transform:uppercase; margin-bottom:3px; }
+    .r-text .rtitle { font-size:15px; font-weight:600; }
+    .r-text .rsub { font-size:11px; color:var(--gray); margin-top:2px; }
+    .r-arrow { width:34px; height:34px; border-radius:50%; border:1px solid rgba(155,48,255,.4); display:flex; align-items:center; justify-content:center; color:var(--purple2); font-size:18px; flex-shrink:0; transition:transform .2s; }
+    .remember-btn:hover .r-arrow { transform:translateX(3px); }
+    .swipe-hint { display:flex; align-items:center; justify-content:center; gap:8px; color:#333; font-size:11px; letter-spacing:.1em; padding-bottom:10px; }
+    .swipe-hint svg { width:16px; height:16px; fill:#333; }
+    /* Page 2 */
+    .lang-btn { font-family:'Outfit',sans-serif; font-size:11px; letter-spacing:.1em; padding:5px 14px; border-radius:20px; border:1px solid var(--border); background:transparent; color:var(--gray); cursor:pointer; transition:all .2s; }
+    .lang-btn.active { border-color:var(--green); color:var(--green); box-shadow:0 0 10px rgba(57,255,20,.2); }
+    .flip-label { display:flex; align-items:center; justify-content:space-between; }
+    .flip-tip { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--purple2); }
+    .flip-tip svg { width:13px; height:13px; fill:var(--purple2); }
+    .card-3d-wrap { perspective:1200px; width:100%; aspect-ratio:9/5; cursor:pointer; }
+    .card-3d-inner { position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:transform .7s cubic-bezier(.4,0,.2,1); border-radius:18px; }
+    .card-3d-wrap.flipped .card-3d-inner { transform:rotateY(180deg); }
+    .card-face { position:absolute; inset:0; backface-visibility:hidden; border-radius:18px; overflow:hidden; border:1px solid var(--border); }
+    .card-face img { width:100%; height:100%; object-fit:cover; display:block; }
+    .card-placeholder { width:100%; height:100%; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:10px; background:linear-gradient(135deg,#111,#1a1a1a); color:var(--gray); font-size:13px; text-align:center; }
+    .card-placeholder svg { width:30px; height:30px; fill:#2a2a2a; }
+    .card-back { transform:rotateY(180deg); }
+    .dl-btn { display:flex; align-items:center; gap:6px; background:transparent; border:1px solid var(--border); border-radius:10px; padding:5px 12px; font-family:'Outfit',sans-serif; font-size:11px; color:var(--gray); cursor:pointer; text-decoration:none; transition:all .2s; flex-shrink:0; }
+    .dl-btn:hover { border-color:var(--green); color:var(--green); }
+    .dl-btn svg { width:13px; height:13px; fill:currentColor; }
+    .info-card { background:var(--card); border:1px solid var(--border); border-radius:22px; overflow:hidden; }
+    .info-row { display:flex; align-items:center; gap:16px; padding:15px 20px; border-bottom:1px solid var(--border); text-decoration:none; transition:background .2s; }
+    .info-row:last-child { border-bottom:none; }
+    .info-row:hover { background:rgba(255,255,255,.025); }
+    .info-icon { width:38px; height:38px; border-radius:11px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .info-icon svg { width:17px; height:17px; }
+    .info-icon.g { background:rgba(57,255,20,.1); }
+    .info-icon.g svg { fill:var(--green); }
+    .info-icon.p { background:rgba(155,48,255,.1); }
+    .info-icon.p svg { fill:var(--purple2); }
+    .info-text .lbl { font-size:10px; color:var(--gray); letter-spacing:.12em; text-transform:uppercase; margin-bottom:2px; }
+    .info-text .val { font-size:14px; color:var(--white); }
+    .info-arrow { color:#2a2a2a; font-size:18px; margin-left:auto; flex-shrink:0; }
+    .fade-up { opacity:0; transform:translateY(16px); animation:fadeup .45s ease forwards; }
+    @keyframes fadeup { to { opacity:1; transform:translateY(0); } }
     .d1{animation-delay:.04s} .d2{animation-delay:.12s} .d3{animation-delay:.20s}
     .d4{animation-delay:.28s} .d5{animation-delay:.36s} .d6{animation-delay:.44s}
   </style>
@@ -131,18 +123,16 @@
 
       <div class="profile-hero fade-up d3">
         <div class="hero-card-inner">
-          <!-- 왼쪽: 사진 -->
           <div class="hero-photo-wrap">
             <div class="placeholder" id="profile-placeholder">
               <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
             </div>
             <img id="profile-img" style="display:none;width:100%;height:100%;object-fit:cover;" />
           </div>
-          <!-- 오른쪽: 이름/직급/회사 -->
           <div class="hero-info-wrap">
             <div class="person-name" id="p1-name">하형석</div>
             <div class="person-title" id="p1-title">이사 / CEO Staff</div>
-            <div class="hero-company-row" id="hero-company-row">
+            <div class="hero-company-row">
               <div class="hero-logo-wrap" id="hero-logo-wrap">
                 <img id="hero-logo-img" style="display:none;width:100%;height:100%;object-fit:contain;" />
                 <svg id="hero-logo-placeholder" viewBox="0 0 24 24" style="width:20px;height:20px;fill:#333"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>
@@ -177,7 +167,6 @@
   <!-- PAGE 2 -->
   <div class="page" id="page2">
     <div class="page-inner">
-
       <div style="padding-top:44px;width:100%;display:flex;align-items:center;gap:8px;flex-wrap:nowrap;">
         <span class="logo-tag" style="font-size:10px;white-space:nowrap;flex-shrink:0;">Business Card</span>
         <div style="display:flex;gap:6px;flex-shrink:0;margin-left:auto;">
@@ -248,15 +237,15 @@
             <div class="val" id="p2-dept" data-ko="CVC / M&A" data-en="CVC / M&A" data-ja="CVC / M&A">CVC / M&A</div>
           </div>
         </div>
-        <a class="info-row" id="email-row" href="/cdn-cgi/l/email-protection#d3b9a6a0a7babdfdbbb293b4b2bfb2abaaa6bdbaa5b6a1a0b6fdb2ba">
+        <a class="info-row" id="email-row" href="mailto:justin.ha@galaxyuniverse.ai">
           <span class="info-icon p"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></span>
           <div class="info-text">
             <div class="lbl" data-ko="이메일" data-en="Email" data-ja="メール">이메일</div>
-            <div class="val" id="p2-email"><span class="__cf_email__" data-cfemail="6f051a1c1b060141070e2f080e030e17161a0106190a1d1c0a410e06">[email&#160;protected]</span></div>
+            <div class="val" id="p2-email">justin.ha@galaxyuniverse.ai</div>
           </div>
           <span class="info-arrow">›</span>
         </a>
-        <a class="info-row" id="phone-row" href="tel:+820107727302​8">
+        <a class="info-row" id="phone-row" href="tel:+82-010-7727-3028">
           <span class="info-icon g"><svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg></span>
           <div class="info-text">
             <div class="lbl" data-ko="휴대폰" data-en="Mobile" data-ja="携帯">휴대폰</div>
@@ -265,7 +254,6 @@
           <span class="info-arrow">›</span>
         </a>
       </div>
-
     </div>
   </div>
 
@@ -280,7 +268,8 @@
   <svg viewBox="0 0 24 24" style="width:15px;height:15px;fill:#888"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
 </a>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<!-- data-cfasync="false" 로 Cloudflare 스크립트 간섭 완전 차단 -->
+<script data-cfasync="false">
   const pages = document.getElementById('pages');
   const dots  = document.querySelectorAll('.dot');
   function goPage(i) { pages.scrollTo({ left: pages.clientWidth * i, behavior: 'smooth' }); }
@@ -291,18 +280,18 @@
 
 /* %%CARD_DATA_START%% */
   const CARD_DATA = {
-    company: { ko: "", en: "Galaxy Corporation", ja: "ギャラクシーコーポレーション" },
-    name:    { ko: "", en: "Justin Ha",    ja: "ハ・ヒョンソク (河 炯 砰)" },
-    title:   { ko: "", en: "Director / CEO Staff",   ja: "取締役 / CEO スタッフ" },
-    dept:    { ko: "CVC / M&A",    en: "CVC / M&A",    ja: "CVC / M&A" },
+    company: { ko: "\uac24\ub7ed\uc2dc\ucf54\ud37c\ub808\uc774\uc158", en: "Galaxy Corporation", ja: "\u30ae\u30e3\u30e9\u30af\u30b7\u30fc\u30b3\u30fc\u30dd\u30ec\u30fc\u30b7\u30e7\u30f3" },
+    name:    { ko: "\ud558\ud615\uc11d", en: "Justin Ha", ja: "\u30cf\u30fb\u30d2\u30e7\u30f3\u30bd\u30af (\u6cb3 \u70af \u7830)" },
+    title:   { ko: "\uc774\uc0ac / CEO Staff", en: "Director / CEO Staff", ja: "\u53d6\u7de0\u5f79 / CEO \u30b9\u30bf\u30c3\u30d5" },
+    dept:    { ko: "CVC / M&A", en: "CVC / M&A", ja: "CVC / M&A" },
     email:        "justin.ha@galaxyuniverse.ai",
     phone:        "+82-010-7727-3028",
     rememberLink: "https://link.rmbr.in/g7fi8o",
-    profile:    "photo/profile.jpg",
-    logo:       "photo/logo.png",
-    logoSmall:  "photo/logo_small.png",
-    cardFront:  "photo/card_front.jpg",
-    cardBack:   "photo/card_back.jpg",
+    profile:   "photo/profile.jpg",
+    logo:      "photo/logo.png",
+    logoSmall: "photo/logo_small.png",
+    cardFront: "photo/card_front.jpg",
+    cardBack:  "photo/card_back.jpg",
   };
 /* %%CARD_DATA_END%% */
 
@@ -310,8 +299,7 @@
     const raw = localStorage.getItem('namecard_data');
     const saved = raw ? JSON.parse(raw) : {};
     const d = {
-      ...CARD_DATA,
-      ...saved,
+      ...CARD_DATA, ...saved,
       rememberLink: saved.rememberLink || CARD_DATA.rememberLink,
       email:        saved.email        || CARD_DATA.email,
       phone:        saved.phone        || CARD_DATA.phone,
@@ -320,10 +308,10 @@
       logoSmall:    saved.logoSmall    || CARD_DATA.logoSmall,
       cardFront:    saved.cardFront    || CARD_DATA.cardFront,
       cardBack:     saved.cardBack     || CARD_DATA.cardBack,
-      company: { ...CARD_DATA.company, ...(saved.company || {}) },
-      name:    { ...CARD_DATA.name,    ...(saved.name    || {}) },
-      title:   { ...CARD_DATA.title,   ...(saved.title   || {}) },
-      dept:    { ...CARD_DATA.dept,    ...(saved.dept    || {}) },
+      company: { ...CARD_DATA.company, ...(saved.company||{}) },
+      name:    { ...CARD_DATA.name,    ...(saved.name   ||{}) },
+      title:   { ...CARD_DATA.title,   ...(saved.title  ||{}) },
+      dept:    { ...CARD_DATA.dept,    ...(saved.dept   ||{}) },
     };
 
     function setImg(imgId, phId, src) {
@@ -331,54 +319,25 @@
       const img = document.getElementById(imgId);
       const ph  = document.getElementById(phId);
       if (img) { img.src = src; img.style.display = 'block'; }
-      if (ph)  { ph.style.display = 'none'; }
+      if (ph)  ph.style.display = 'none';
     }
-    setImg('profile-img',       'profile-placeholder',       d.profile);
-    // 사진1: 상단 회사 블록 로고
-    if (d.logo) {
-      const logoImg = document.getElementById('logo-img');
-      const logoPh  = document.getElementById('logo-placeholder');
-      if (logoImg) { logoImg.src = d.logo; logoImg.style.display = 'block'; }
-      if (logoPh)  { logoPh.style.display = 'none'; }
-    }
-    // 사진2: 프로필 하단 작은 로고 (별도 이미지)
-    if (d.logoSmall) {
-      const heroLogo = document.getElementById('hero-logo-img');
-      const heroPh   = document.getElementById('hero-logo-placeholder');
-      if (heroLogo) { heroLogo.src = d.logoSmall; heroLogo.style.display = 'block'; }
-      if (heroPh)   { heroPh.style.display = 'none'; }
-    }
+
+    setImg('profile-img',    'profile-placeholder',    d.profile);
+    setImg('logo-img',       'logo-placeholder',       d.logo);
+    setImg('hero-logo-img',  'hero-logo-placeholder',  d.logoSmall);
     setImg('card-front-img', 'card-front-placeholder', d.cardFront);
     setImg('card-back-img',  'card-back-placeholder',  d.cardBack);
 
-    if (d.company?.ko) {
-      const c1 = document.getElementById('p1-company');
-      const c2 = document.getElementById('p1-company-sub');
-      if (c1 && d.company.ko) c1.textContent = d.company.ko;
-      if (c2 && d.company.ko) c2.textContent = d.company.ko;
-    }
-    if (d.name?.ko)  { const el = document.getElementById('p1-name');  if (el && d.name.ko)  el.textContent = d.name.ko; }
-    if (d.title?.ko) { const el = document.getElementById('p1-title'); if (el && d.title.ko) el.textContent = d.title.ko; }
-    // hero logo
-    if (d.logo) {
-      const hl = document.getElementById('hero-logo-img');
-      const hp = document.getElementById('hero-logo-placeholder');
-      if (hl) { hl.src = d.logo; hl.style.display = 'block'; }
-      if (hp) hp.style.display = 'none';
-    }
-    if (d.rememberLink) {
-      const btn = document.getElementById('remember-btn');
-      if (btn) btn.href = d.rememberLink;
-    }
+    if (d.name?.ko)  { const el=document.getElementById('p1-name');  if(el) el.textContent=d.name.ko; }
+    if (d.title?.ko) { const el=document.getElementById('p1-title'); if(el) el.textContent=d.title.ko; }
+    if (d.rememberLink) { const btn=document.getElementById('remember-btn'); if(btn) btn.href=d.rememberLink; }
 
     function setLangEl(id, obj) {
       const el = document.getElementById(id);
       if (!el || !obj) return;
-      // 빈값이면 기존 HTML값 유지
-      if (obj.ko) el.dataset.ko = obj.ko;
+      if (obj.ko) { el.dataset.ko = obj.ko; el.textContent = obj.ko; }
       if (obj.en) el.dataset.en = obj.en;
       if (obj.ja) el.dataset.ja = obj.ja;
-      if (obj.ko) el.textContent = obj.ko;
     }
     setLangEl('p2-company', d.company);
     setLangEl('p2-name',    d.name);
@@ -386,12 +345,16 @@
     setLangEl('p2-dept',    d.dept);
 
     if (d.email) {
-      document.getElementById('p2-email').textContent = d.email;
-      document.getElementById('email-row').href = 'mailto:' + d.email;
+      const el = document.getElementById('p2-email');
+      const row = document.getElementById('email-row');
+      if (el) el.textContent = d.email;
+      if (row) row.href = 'mailto:' + d.email;
     }
     if (d.phone) {
-      document.getElementById('p2-phone').textContent = d.phone;
-      document.getElementById('phone-row').href = 'tel:' + d.phone.replace(/[^+\d]/g,'');
+      const el = document.getElementById('p2-phone');
+      const row = document.getElementById('phone-row');
+      if (el) el.textContent = d.phone;
+      if (row) row.href = 'tel:' + d.phone.replace(/[^+\d]/g,'');
     }
   })();
 
@@ -409,8 +372,17 @@
   let currentLang = 'ko';
   function setLang(lang) {
     currentLang = lang;
-    document.querySelectorAll('[data-ko]').forEach(el => {
+    document.querySelectorAll('[data-ko]').forEach(function(el) {
       if (el.dataset[lang]) el.textContent = el.dataset[lang];
     });
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.classList.toggle(
+    document.querySelectorAll('.lang-btn').forEach(function(btn) {
+      btn.classList.toggle('active',
+        (lang === 'ko' && btn.textContent.trim() === '\ud55c\uad6d\uc5b4') ||
+        (lang === 'en' && btn.textContent.trim() === 'English') ||
+        (lang === 'ja' && btn.textContent.trim() === '\u65e5\u672c\u8a9e')
+      );
+    });
+  }
+</script>
+</body>
+</html>
