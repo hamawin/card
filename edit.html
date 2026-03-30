@@ -426,8 +426,11 @@
       ...photos,
     };
 
-    // localStorage 저장
-    try { localStorage.setItem(STORE, JSON.stringify(d)); } catch(e) {}
+    // localStorage에는 텍스트 데이터만 저장 (사진 제외)
+    const textOnly = { ...d };
+    delete textOnly.profile; delete textOnly.logo;
+    delete textOnly.cardFront; delete textOnly.cardBack;
+    try { localStorage.setItem(STORE, JSON.stringify(textOnly)); } catch(e) {}
 
     const btn  = document.getElementById('saveBtn');
     const text = document.getElementById('saveBtnText');
