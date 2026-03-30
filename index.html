@@ -7,367 +7,104 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
   <style>
-    /* ── Reset ───────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --black:   #000000;
-      --dark:    #0a0a0a;
-      --card:    #111111;
-      --border:  #1e1e1e;
-      --green:   #39ff14;
-      --purple:  #9b30ff;
-      --purple2: #c77dff;
-      --white:   #f0f0f0;
-      --gray:    #888888;
+      --black:   #000000; --dark: #0a0a0a; --card: #111111;
+      --border:  #1e1e1e; --green: #39ff14; --purple: #9b30ff;
+      --purple2: #c77dff; --white: #f0f0f0; --gray: #888888;
     }
-
-    html, body {
-      width: 100%; height: 100%;
-      overflow: hidden;
-      font-family: 'Outfit', sans-serif;
-      background: var(--black);
-      color: var(--white);
-    }
-
-    /* ── Ambient glows (fixed) ──────────────────────────── */
-    .glow-green {
-      position: fixed; width: 500px; height: 500px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(57,255,20,.10) 0%, transparent 70%);
-      top: -120px; left: -120px; pointer-events: none; z-index: 0;
-    }
-    .glow-purple {
-      position: fixed; width: 600px; height: 600px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(155,48,255,.09) 0%, transparent 70%);
-      bottom: -160px; right: -160px; pointer-events: none; z-index: 0;
-    }
-
-    /* ── Page container (horizontal scroll-snap) ────────── */
-    .pages {
-      position: relative; z-index: 1;
-      display: flex;
-      width: 100%; height: 100%;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
+    html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Outfit', sans-serif; background: var(--black); color: var(--white); }
+    .glow-green { position: fixed; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(57,255,20,.10) 0%, transparent 70%); top: -120px; left: -120px; pointer-events: none; z-index: 0; }
+    .glow-purple { position: fixed; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(155,48,255,.09) 0%, transparent 70%); bottom: -160px; right: -160px; pointer-events: none; z-index: 0; }
+    .pages { position: relative; z-index: 1; display: flex; width: 100%; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
     .pages::-webkit-scrollbar { display: none; }
-
-    .page {
-      flex: 0 0 100%;
-      width: 100%; height: 100%;
-      scroll-snap-align: start;
-      overflow-y: auto;
-      scrollbar-width: none;
-      display: flex; flex-direction: column;
-      align-items: center;
-    }
+    .page { flex: 0 0 100%; width: 100%; height: 100%; scroll-snap-align: start; overflow-y: auto; scrollbar-width: none; display: flex; flex-direction: column; align-items: center; }
     .page::-webkit-scrollbar { display: none; }
-
-    .page-inner {
-      width: 100%;
-      max-width: 480px;
-      padding: 0 20px 50px;
-      display: flex; flex-direction: column;
-      gap: 22px;
-    }
-
-    /* ── Page dots ──────────────────────────────────────── */
-    .page-dots {
-      position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
-      display: flex; gap: 8px; z-index: 100;
-    }
-    .dot {
-      width: 6px; height: 6px; border-radius: 3px;
-      background: var(--border);
-      transition: all .3s;
-      cursor: pointer;
-    }
-    .dot.active {
-      width: 22px;
-      background: var(--green);
-      box-shadow: 0 0 8px var(--green);
-    }
-
-    /* ── Topbar ─────────────────────────────────────────── */
-    .topbar {
-      display: flex; align-items: center; justify-content: space-between;
-      padding-top: 44px;
-    }
-    .logo-tag {
-      font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
-      color: var(--green); border: 1px solid var(--green);
-      padding: 4px 12px; border-radius: 20px;
-      box-shadow: 0 0 10px rgba(57,255,20,.25);
-    }
-    .nfc-badge {
-      display: flex; align-items: center; gap: 5px;
-      font-size: 11px; color: var(--gray); letter-spacing: .1em;
-    }
+    .page-inner { width: 100%; max-width: 480px; padding: 0 20px 50px; display: flex; flex-direction: column; gap: 22px; }
+    .page-dots { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 100; }
+    .dot { width: 6px; height: 6px; border-radius: 3px; background: var(--border); transition: all .3s; cursor: pointer; }
+    .dot.active { width: 22px; background: var(--green); box-shadow: 0 0 8px var(--green); }
+    .topbar { display: flex; align-items: center; justify-content: space-between; padding-top: 44px; }
+    .logo-tag { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--green); border: 1px solid var(--green); padding: 4px 12px; border-radius: 20px; box-shadow: 0 0 10px rgba(57,255,20,.25); }
+    .nfc-badge { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--gray); letter-spacing: .1em; }
     .nfc-badge svg { width: 16px; height: 16px; fill: var(--purple); }
-
-    /* ── PAGE 1 ─────────────────────────────────────────── */
-
-    .company-block {
-      display: flex; align-items: center; gap: 14px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 18px 22px;
-      position: relative; overflow: hidden;
-    }
-    .company-block::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, var(--green), var(--purple));
-    }
-    .company-logo {
-      width: 52px; height: 52px; border-radius: 14px;
-      object-fit: cover;
-      background: linear-gradient(135deg, #1a1a1a, #222);
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; overflow: hidden;
-    }
+    .company-block { display: flex; align-items: center; gap: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 18px 22px; position: relative; overflow: hidden; }
+    .company-block::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--green), var(--purple)); }
+    .company-logo { width: 52px; height: 52px; border-radius: 14px; background: linear-gradient(135deg, #1a1a1a, #222); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; }
     .company-logo svg { width: 28px; height: 28px; fill: #333; }
     .company-logo img { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; }
-    .company-name-wrap .sub {
-      font-size: 10px; color: var(--gray); letter-spacing: .15em;
-      text-transform: uppercase; margin-bottom: 3px;
-    }
-    .company-name-wrap .name {
-      font-size: 18px; font-weight: 700;
-      background: linear-gradient(90deg, var(--green), var(--purple2));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-
-    .profile-hero {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 28px;
-      padding: 40px 28px 36px;
-      display: flex; flex-direction: column; align-items: center; gap: 22px;
-      position: relative; overflow: hidden;
-    }
-    .profile-hero::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 50% 0%, rgba(155,48,255,.08) 0%, transparent 60%);
-      pointer-events: none;
-    }
-
-    .avatar-ring {
-      position: relative; width: 120px; height: 120px;
-    }
-    .avatar-ring::before {
-      content: '';
-      position: absolute; inset: -3px; border-radius: 50%;
-      background: conic-gradient(var(--green), var(--purple), var(--green));
-      animation: spin 6s linear infinite;
-    }
+    .company-name-wrap .sub { font-size: 10px; color: var(--gray); letter-spacing: .15em; text-transform: uppercase; margin-bottom: 3px; }
+    .company-name-wrap .name { font-size: 18px; font-weight: 700; background: linear-gradient(90deg, var(--green), var(--purple2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .profile-hero { background: var(--card); border: 1px solid var(--border); border-radius: 28px; padding: 40px 28px 36px; display: flex; flex-direction: column; align-items: center; gap: 22px; position: relative; overflow: hidden; }
+    .profile-hero::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, rgba(155,48,255,.08) 0%, transparent 60%); pointer-events: none; }
+    .avatar-ring { position: relative; width: 120px; height: 120px; }
+    .avatar-ring::before { content: ''; position: absolute; inset: -3px; border-radius: 50%; background: conic-gradient(var(--green), var(--purple), var(--green)); animation: spin 6s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .avatar-ring .inner {
-      position: absolute; inset: 3px; border-radius: 50%;
-      background: var(--black);
-      overflow: hidden; z-index: 1;
-    }
-    .avatar-ring .inner img,
-    .avatar-ring .inner .placeholder {
-      width: 100%; height: 100%;
-      object-fit: cover; border-radius: 50%;
-    }
-    .avatar-ring .inner .placeholder {
-      display: flex; align-items: center; justify-content: center;
-      background: #151515;
-      font-size: 44px; color: #333;
-    }
+    .avatar-ring .inner { position: absolute; inset: 3px; border-radius: 50%; background: var(--black); overflow: hidden; z-index: 1; }
+    .avatar-ring .inner img, .avatar-ring .inner .placeholder { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .avatar-ring .inner .placeholder { display: flex; align-items: center; justify-content: center; background: #151515; }
     .avatar-ring .inner .placeholder svg { width: 44px; height: 44px; fill: #333; }
-
     .hero-info { text-align: center; }
-    .hero-info .person-name {
-      font-size: 32px; font-weight: 900; letter-spacing: -.03em;
-      background: linear-gradient(135deg, #fff 40%, var(--purple2));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-    .hero-info .person-title {
-      font-size: 13px; color: var(--gray); margin-top: 6px; font-weight: 300;
-      letter-spacing: .05em;
-    }
-
-    .remember-btn {
-      display: flex; align-items: center; justify-content: space-between;
-      background: linear-gradient(135deg, rgba(155,48,255,.15), rgba(57,255,20,.07));
-      border: 1px solid rgba(155,48,255,.45);
-      border-radius: 20px; padding: 20px 22px;
-      text-decoration: none;
-      transition: all .25s; position: relative; overflow: hidden;
-    }
-    .remember-btn::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(155,48,255,.08), rgba(57,255,20,.04));
-      opacity: 0; transition: opacity .25s;
-    }
+    .hero-info .person-name { font-size: 32px; font-weight: 900; letter-spacing: -.03em; background: linear-gradient(135deg, #fff 40%, var(--purple2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero-info .person-title { font-size: 13px; color: var(--gray); margin-top: 6px; font-weight: 300; letter-spacing: .05em; }
+    .remember-btn { display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, rgba(155,48,255,.15), rgba(57,255,20,.07)); border: 1px solid rgba(155,48,255,.45); border-radius: 20px; padding: 20px 22px; text-decoration: none; transition: all .25s; position: relative; overflow: hidden; }
+    .remember-btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(155,48,255,.08), rgba(57,255,20,.04)); opacity: 0; transition: opacity .25s; }
     .remember-btn:hover::before { opacity: 1; }
-    .remember-btn:hover {
-      border-color: rgba(155,48,255,.7);
-      box-shadow: 0 0 30px rgba(155,48,255,.2);
-    }
+    .remember-btn:hover { border-color: rgba(155,48,255,.7); box-shadow: 0 0 30px rgba(155,48,255,.2); }
     .r-left { display: flex; align-items: center; gap: 14px; }
-    .r-icon {
-      width: 48px; height: 48px; border-radius: 14px;
-      background: linear-gradient(135deg, var(--purple), #6a0dad);
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 0 20px rgba(155,48,255,.35); flex-shrink: 0;
-    }
+    .r-icon { width: 48px; height: 48px; border-radius: 14px; background: linear-gradient(135deg, var(--purple), #6a0dad); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(155,48,255,.35); flex-shrink: 0; }
     .r-icon svg { width: 22px; height: 22px; fill: #fff; }
     .r-text .rtag { font-size: 10px; color: var(--purple2); letter-spacing: .15em; text-transform: uppercase; margin-bottom: 3px; }
     .r-text .rtitle { font-size: 15px; font-weight: 600; }
     .r-text .rsub { font-size: 11px; color: var(--gray); margin-top: 2px; }
-    .r-arrow {
-      width: 34px; height: 34px; border-radius: 50%;
-      border: 1px solid rgba(155,48,255,.4);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--purple2); font-size: 18px; flex-shrink: 0;
-      transition: transform .2s;
-    }
+    .r-arrow { width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(155,48,255,.4); display: flex; align-items: center; justify-content: center; color: var(--purple2); font-size: 18px; flex-shrink: 0; transition: transform .2s; }
     .remember-btn:hover .r-arrow { transform: translateX(3px); }
-
-    .swipe-hint {
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      color: #333; font-size: 11px; letter-spacing: .1em;
-      padding-bottom: 10px;
-    }
+    .swipe-hint { display: flex; align-items: center; justify-content: center; gap: 8px; color: #333; font-size: 11px; letter-spacing: .1em; padding-bottom: 10px; }
     .swipe-hint svg { width: 16px; height: 16px; fill: #333; }
-
-    /* ── PAGE 2 ─────────────────────────────────────────── */
-
-    .lang-switch {
-      display: flex; gap: 8px; justify-content: flex-end;
-    }
-    .lang-btn {
-      font-family: 'Outfit', sans-serif;
-      font-size: 11px; letter-spacing: .1em;
-      padding: 5px 14px; border-radius: 20px;
-      border: 1px solid var(--border);
-      background: transparent; color: var(--gray);
-      cursor: pointer; transition: all .2s;
-    }
-    .lang-btn.active {
-      border-color: var(--green); color: var(--green);
-      box-shadow: 0 0 10px rgba(57,255,20,.2);
-    }
-
-    .flip-label {
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .section-label {
-      font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--gray);
-    }
-    .flip-tip {
-      display: flex; align-items: center; gap: 5px;
-      font-size: 11px; color: var(--purple2);
-    }
+    .lang-btn { font-family: 'Outfit', sans-serif; font-size: 11px; letter-spacing: .1em; padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--gray); cursor: pointer; transition: all .2s; }
+    .lang-btn.active { border-color: var(--green); color: var(--green); box-shadow: 0 0 10px rgba(57,255,20,.2); }
+    .flip-label { display: flex; align-items: center; justify-content: space-between; }
+    .flip-tip { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--purple2); }
     .flip-tip svg { width: 13px; height: 13px; fill: var(--purple2); }
-
-    .card-3d-wrap {
-      perspective: 1200px;
-      width: 100%; aspect-ratio: 9/5;
-      cursor: pointer;
-    }
-    .card-3d-inner {
-      position: relative; width: 100%; height: 100%;
-      transform-style: preserve-3d;
-      transition: transform .7s cubic-bezier(.4,0,.2,1);
-      border-radius: 18px;
-    }
+    .card-3d-wrap { perspective: 1200px; width: 100%; aspect-ratio: 9/5; cursor: pointer; }
+    .card-3d-inner { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform .7s cubic-bezier(.4,0,.2,1); border-radius: 18px; }
     .card-3d-wrap.flipped .card-3d-inner { transform: rotateY(180deg); }
-    .card-face {
-      position: absolute; inset: 0;
-      backface-visibility: hidden;
-      border-radius: 18px; overflow: hidden;
-      border: 1px solid var(--border);
-    }
+    .card-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 18px; overflow: hidden; border: 1px solid var(--border); }
     .card-face img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .card-placeholder {
-      width: 100%; height: 100%;
-      display: flex; align-items: center; justify-content: center;
-      flex-direction: column; gap: 10px;
-      background: linear-gradient(135deg, #111, #1a1a1a);
-      color: var(--gray); font-size: 13px; text-align: center;
-    }
+    .card-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 10px; background: linear-gradient(135deg, #111, #1a1a1a); color: var(--gray); font-size: 13px; text-align: center; }
     .card-placeholder svg { width: 30px; height: 30px; fill: #2a2a2a; }
     .card-back { transform: rotateY(180deg); }
-
-    .dl-btn {
-      display: flex; align-items: center; gap: 6px;
-      background: transparent;
-      border: 1px solid var(--border);
-      border-radius: 10px; padding: 5px 12px;
-      font-family: 'Outfit', sans-serif;
-      font-size: 11px; color: var(--gray);
-      cursor: pointer; text-decoration: none;
-      transition: all .2s; flex-shrink: 0;
-    }
+    .dl-btn { display: flex; align-items: center; gap: 6px; background: transparent; border: 1px solid var(--border); border-radius: 10px; padding: 5px 12px; font-family: 'Outfit', sans-serif; font-size: 11px; color: var(--gray); cursor: pointer; text-decoration: none; transition: all .2s; flex-shrink: 0; }
     .dl-btn:hover { border-color: var(--green); color: var(--green); }
     .dl-btn svg { width: 13px; height: 13px; fill: currentColor; }
-
-    .info-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 22px;
-      overflow: hidden;
-    }
-    .info-row {
-      display: flex; align-items: center; gap: 16px;
-      padding: 15px 20px;
-      border-bottom: 1px solid var(--border);
-      text-decoration: none;
-      transition: background .2s;
-    }
+    .info-card { background: var(--card); border: 1px solid var(--border); border-radius: 22px; overflow: hidden; }
+    .info-row { display: flex; align-items: center; gap: 16px; padding: 15px 20px; border-bottom: 1px solid var(--border); text-decoration: none; transition: background .2s; }
     .info-row:last-child { border-bottom: none; }
     .info-row:hover { background: rgba(255,255,255,.025); }
-    .info-icon {
-      width: 38px; height: 38px; border-radius: 11px;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    }
+    .info-icon { width: 38px; height: 38px; border-radius: 11px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .info-icon svg { width: 17px; height: 17px; }
     .info-icon.g { background: rgba(57,255,20,.1); }
     .info-icon.g svg { fill: var(--green); }
     .info-icon.p { background: rgba(155,48,255,.1); }
     .info-icon.p svg { fill: var(--purple2); }
-    .info-text .lbl {
-      font-size: 10px; color: var(--gray); letter-spacing: .12em;
-      text-transform: uppercase; margin-bottom: 2px;
-    }
-    .info-text .val {
-      font-size: 14px; color: var(--white);
-    }
+    .info-text .lbl { font-size: 10px; color: var(--gray); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 2px; }
+    .info-text .val { font-size: 14px; color: var(--white); }
     .info-arrow { color: #2a2a2a; font-size: 18px; margin-left: auto; flex-shrink: 0; }
-
-    .fade-up {
-      opacity: 0; transform: translateY(16px);
-      animation: fadeup .45s ease forwards;
-    }
+    .fade-up { opacity: 0; transform: translateY(16px); animation: fadeup .45s ease forwards; }
     @keyframes fadeup { to { opacity: 1; transform: translateY(0); } }
-    .d1{animation-delay:.04s} .d2{animation-delay:.12s}
-    .d3{animation-delay:.20s} .d4{animation-delay:.28s}
-    .d5{animation-delay:.36s} .d6{animation-delay:.44s}
+    .d1{animation-delay:.04s} .d2{animation-delay:.12s} .d3{animation-delay:.20s}
+    .d4{animation-delay:.28s} .d5{animation-delay:.36s} .d6{animation-delay:.44s}
   </style>
 </head>
 <body>
-
 <div class="glow-green"></div>
 <div class="glow-purple"></div>
 
-<!-- ─────────────────────────────────── PAGES ─── -->
 <div class="pages" id="pages">
 
-  <!-- ──────────────── PAGE 1 ──────────────── -->
+  <!-- PAGE 1 -->
   <div class="page" id="page1">
     <div class="page-inner">
-
-      <!-- Topbar -->
       <div class="topbar fade-up d1">
         <span class="logo-tag">Digital Namecard</span>
         <span class="nfc-badge">
@@ -376,7 +113,6 @@
         </span>
       </div>
 
-      <!-- Company block -->
       <div class="company-block fade-up d2">
         <div class="company-logo" id="logo-wrap">
           <svg viewBox="0 0 24 24" id="logo-placeholder"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
@@ -388,7 +124,6 @@
         </div>
       </div>
 
-      <!-- Profile hero -->
       <div class="profile-hero fade-up d3">
         <div class="avatar-ring">
           <div class="inner">
@@ -404,7 +139,6 @@
         </div>
       </div>
 
-      <!-- Remember button -->
       <a class="remember-btn fade-up d4" id="remember-btn" href="#" target="_blank" rel="noopener">
         <div class="r-left">
           <div class="r-icon">
@@ -419,22 +153,19 @@
         <div class="r-arrow">›</div>
       </a>
 
-      <!-- Swipe hint -->
       <div class="swipe-hint fade-up d5">
         <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
         스와이프해서 명함 정보 보기
         <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
       </div>
-
     </div>
-  </div><!-- /page1 -->
+  </div>
 
-  <!-- ──────────────── PAGE 2 ──────────────── -->
+  <!-- PAGE 2 -->
   <div class="page" id="page2">
     <div class="page-inner">
 
-      <!-- Topbar -->
-      <div style="padding-top:44px;width:100%;display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:hidden;">
+      <div style="padding-top:44px;width:100%;display:flex;align-items:center;gap:8px;flex-wrap:nowrap;">
         <span class="logo-tag" style="font-size:10px;white-space:nowrap;flex-shrink:0;">Business Card</span>
         <div style="display:flex;gap:6px;flex-shrink:0;margin-left:auto;">
           <button class="lang-btn active" style="font-size:10px;padding:4px 10px;white-space:nowrap;" onclick="setLang('ko')">한국어</button>
@@ -443,10 +174,9 @@
         </div>
       </div>
 
-      <!-- Flip card + download -->
       <div class="flip-label">
         <div style="display:flex;align-items:center;gap:10px;">
-          <button class="dl-btn" id="saveCardBtn" onclick="saveCurrentFace()">
+          <button class="dl-btn" onclick="saveCurrentFace()">
             <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
             <span data-ko="저장" data-en="Save" data-ja="保存">저장</span>
           </button>
@@ -459,14 +189,14 @@
 
       <div class="card-3d-wrap" id="cardFlip" onclick="this.classList.toggle('flipped')">
         <div class="card-3d-inner">
-          <div class="card-face card-front" id="card-front-face">
+          <div class="card-face card-front">
             <div class="card-placeholder" id="card-front-placeholder">
               <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/></svg>
               <span data-ko="명함 앞면" data-en="Card Front" data-ja="名刺 表面">명함 앞면</span>
             </div>
             <img id="card-front-img" style="display:none;width:100%;height:100%;object-fit:cover;" />
           </div>
-          <div class="card-face card-back" id="card-back-face">
+          <div class="card-face card-back">
             <div class="card-placeholder" id="card-back-placeholder">
               <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/></svg>
               <span data-ko="명함 뒷면" data-en="Card Back" data-ja="名刺 裏面">명함 뒷면</span>
@@ -476,118 +206,76 @@
         </div>
       </div>
 
-      <!-- Contact info card -->
       <div class="info-card">
-
-        <!-- Company -->
         <div class="info-row">
-          <span class="info-icon p">
-            <svg viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg>
-          </span>
+          <span class="info-icon p"><svg viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg></span>
           <div class="info-text">
             <div class="lbl" data-ko="회사" data-en="Company" data-ja="会社">회사</div>
             <div class="val" id="p2-company" data-ko="갤럭시코퍼레이션" data-en="Galaxy Corporation" data-ja="ギャラクシーコーポレーション">갤럭시코퍼레이션</div>
           </div>
         </div>
-
-        <!-- Name -->
         <div class="info-row">
-          <span class="info-icon g">
-            <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
-          </span>
+          <span class="info-icon g"><svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></span>
           <div class="info-text">
             <div class="lbl" data-ko="이름" data-en="Name" data-ja="名前">이름</div>
             <div class="val" id="p2-name" data-ko="하형석" data-en="Justin Ha" data-ja="ハ・ヒョンソク (河 炯 碩)">하형석</div>
           </div>
         </div>
-
-        <!-- Title -->
         <div class="info-row">
-          <span class="info-icon p">
-            <svg viewBox="0 0 24 24"><path d="M20 6h-2.18c.07-.44.18-.88.18-1.34C18 2.54 15.5 0 12.34 0S6.67 2.54 6.67 4.66c0 .46.1.9.18 1.34H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7.66-4c1.28 0 2.34 1.07 2.34 2.34 0 .28-.1.56-.2.82L12 6.5l-2.48-1.34c-.1-.26-.2-.54-.2-.82C9.33 3.07 10.4 2 11.66 2h.68zM12 9c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm4 10H8v-1.56C8 15.65 11.86 15 12 15s4 .65 4 2.44V19z"/></svg>
-          </span>
+          <span class="info-icon p"><svg viewBox="0 0 24 24"><path d="M20 6h-2.18c.07-.44.18-.88.18-1.34C18 2.54 15.5 0 12.34 0S6.67 2.54 6.67 4.66c0 .46.1.9.18 1.34H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7.66-4c1.28 0 2.34 1.07 2.34 2.34 0 .28-.1.56-.2.82L12 6.5l-2.48-1.34c-.1-.26-.2-.54-.2-.82C9.33 3.07 10.4 2 11.66 2h.68zM12 9c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm4 10H8v-1.56C8 15.65 11.86 15 12 15s4 .65 4 2.44V19z"/></svg></span>
           <div class="info-text">
             <div class="lbl" data-ko="직급" data-en="Title" data-ja="役職">직급</div>
             <div class="val" id="p2-title" data-ko="이사 / CEO Staff" data-en="Director / CEO Staff" data-ja="取締役 / CEO スタッフ">이사 / CEO Staff</div>
           </div>
         </div>
-
-        <!-- Department -->
         <div class="info-row">
-          <span class="info-icon g">
-            <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-          </span>
+          <span class="info-icon g"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></span>
           <div class="info-text">
             <div class="lbl" data-ko="부서" data-en="Department" data-ja="部署">부서</div>
             <div class="val" id="p2-dept" data-ko="CVC / M&A" data-en="CVC / M&A" data-ja="CVC / M&A">CVC / M&A</div>
           </div>
         </div>
-
-        <!-- Email -->
-        <a class="info-row" id="email-row" href="/cdn-cgi/l/email-protection#7c16090f08151252141d3c1b1d101d04050912150a190e0f19521d15">
-          <span class="info-icon p">
-            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-          </span>
+        <a class="info-row" id="email-row" href="mailto:justin.ha@galaxyuniverse.ai">
+          <span class="info-icon p"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></span>
           <div class="info-text">
             <div class="lbl" data-ko="이메일" data-en="Email" data-ja="メール">이메일</div>
-            <div class="val" id="p2-email"><span class="__cf_email__" data-cfemail="c4aeb1b7b0adaaeaaca584a3a5a8a5bcbdb1aaadb2a1b6b7a1eaa5ad">[email&#160;protected]</span></div>
+            <div class="val" id="p2-email">justin.ha@galaxyuniverse.ai</div>
           </div>
           <span class="info-arrow">›</span>
         </a>
-
-        <!-- Phone -->
-        <a class="info-row" id="phone-row" href="tel:+82-010-7727-3028">
-          <span class="info-icon g">
-            <svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>
-          </span>
+        <a class="info-row" id="phone-row" href="tel:+820107727302​8">
+          <span class="info-icon g"><svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg></span>
           <div class="info-text">
             <div class="lbl" data-ko="휴대폰" data-en="Mobile" data-ja="携帯">휴대폰</div>
             <div class="val" id="p2-phone">+82-010-7727-3028</div>
           </div>
           <span class="info-arrow">›</span>
         </a>
-
-      </div><!-- /info-card -->
+      </div>
 
     </div>
-  </div><!-- /page2 -->
+  </div>
 
-</div><!-- /pages -->
+</div>
 
-<!-- Page dots -->
 <div class="page-dots">
   <div class="dot active" onclick="goPage(0)"></div>
   <div class="dot" onclick="goPage(1)"></div>
 </div>
 
-<!-- ✅ 수정 버튼: 기본 숨김, admin 페이지에서만 표시 -->
-<a href="admin.html" id="edit-fab" style="
-  position:fixed; bottom:20px; right:20px; z-index:200;
-  width:36px; height:36px; border-radius:50%;
-  background:#111; border:1px solid #2a2a2a;
-  display:none; align-items:center; justify-content:center;
-  opacity:.4; transition:opacity .2s; text-decoration:none;
-" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.4">
-  <svg viewBox="0 0 24 24" style="width:15px;height:15px;fill:#888">
-    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-  </svg>
+<a href="admin.html" id="edit-fab" style="position:fixed;bottom:20px;right:20px;z-index:200;width:36px;height:36px;border-radius:50%;background:#111;border:1px solid #2a2a2a;display:none;align-items:center;justify-content:center;opacity:.4;transition:opacity .2s;text-decoration:none;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.4">
+  <svg viewBox="0 0 24 24" style="width:15px;height:15px;fill:#888"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
 </a>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  /* ── Page dots ─────────────────────────────────── */
+<script>
   const pages = document.getElementById('pages');
   const dots  = document.querySelectorAll('.dot');
-
-  function goPage(i) {
-    pages.scrollTo({ left: pages.clientWidth * i, behavior: 'smooth' });
-  }
-
+  function goPage(i) { pages.scrollTo({ left: pages.clientWidth * i, behavior: 'smooth' }); }
   pages.addEventListener('scroll', () => {
     const idx = Math.round(pages.scrollLeft / pages.clientWidth);
     dots.forEach((d, i) => d.classList.toggle('active', i === idx));
   });
 
-  /* ── CARD DATA ──────────────────────────────────── */
 /* %%CARD_DATA_START%% */
   const CARD_DATA = {
     company: { ko: "갤럭시코퍼레이션", en: "Galaxy Corporation", ja: "ギャラクシーコーポレーション" },
@@ -596,7 +284,7 @@
     dept:    { ko: "CVC / M&A",    en: "CVC / M&A",    ja: "CVC / M&A" },
     email:        "justin.ha@galaxyuniverse.ai",
     phone:        "+82-010-7727-3028",
-    rememberLink: "",
+    rememberLink: "https://link.rmbr.in/g7fi8o",
     profile:   "photo/profile.jpg",
     logo:      "photo/logo.png",
     cardFront: "photo/card_front.jpg",
@@ -604,7 +292,6 @@
   };
 /* %%CARD_DATA_END%% */
 
-  /* ── Load from localStorage (없으면 CARD_DATA 사용) ── */
   (function loadData() {
     const raw = localStorage.getItem('namecard_data');
     const saved = raw ? JSON.parse(raw) : {};
@@ -614,6 +301,10 @@
       rememberLink: saved.rememberLink || CARD_DATA.rememberLink,
       email:        saved.email        || CARD_DATA.email,
       phone:        saved.phone        || CARD_DATA.phone,
+      profile:      saved.profile      || CARD_DATA.profile,
+      logo:         saved.logo         || CARD_DATA.logo,
+      cardFront:    saved.cardFront    || CARD_DATA.cardFront,
+      cardBack:     saved.cardBack     || CARD_DATA.cardBack,
       company: { ...CARD_DATA.company, ...(saved.company || {}) },
       name:    { ...CARD_DATA.name,    ...(saved.name    || {}) },
       title:   { ...CARD_DATA.title,   ...(saved.title   || {}) },
@@ -633,7 +324,6 @@
     setImg('card-front-img', 'card-front-placeholder', d.cardFront);
     setImg('card-back-img',  'card-back-placeholder',  d.cardBack);
 
-    // Page 1
     if (d.company?.ko) document.getElementById('p1-company').textContent = d.company.ko;
     if (d.name?.ko)    document.getElementById('p1-name').textContent    = d.name.ko;
     if (d.title?.ko)   document.getElementById('p1-title').textContent   = d.title.ko;
@@ -642,7 +332,6 @@
       if (btn) btn.href = d.rememberLink;
     }
 
-    // Page 2
     function setLangEl(id, obj) {
       const el = document.getElementById(id);
       if (!el || !obj) return;
@@ -666,11 +355,9 @@
     }
   })();
 
-  /* ── Save current card face ──────────────────────── */
   function saveCurrentFace() {
     const isFlipped = document.getElementById('cardFlip').classList.contains('flipped');
-    const imgId = isFlipped ? 'card-back-img' : 'card-front-img';
-    const img   = document.getElementById(imgId);
+    const img = document.getElementById(isFlipped ? 'card-back-img' : 'card-front-img');
     if (img && img.style.display !== 'none' && img.src) {
       const a = document.createElement('a');
       a.href = img.src;
@@ -679,13 +366,20 @@
     }
   }
 
-  /* ── Language switcher ───────────────────────────── */
   let currentLang = 'ko';
-
   function setLang(lang) {
     currentLang = lang;
     document.querySelectorAll('[data-ko]').forEach(el => {
       if (el.dataset[lang]) el.textContent = el.dataset[lang];
     });
     document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.classList.toggle('
+      btn.classList.toggle('active',
+        (lang === 'ko' && btn.textContent.trim() === '한국어') ||
+        (lang === 'en' && btn.textContent.trim() === 'English') ||
+        (lang === 'ja' && btn.textContent.trim() === '日本語')
+      );
+    });
+  }
+</script>
+</body>
+</html>
