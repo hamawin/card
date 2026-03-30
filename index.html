@@ -434,12 +434,14 @@
     <div class="page-inner">
 
       <!-- Topbar -->
-      <div style="padding-top:44px;width:100%;display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:hidden;">
-        <span class="logo-tag" style="font-size:10px;white-space:nowrap;flex-shrink:0;">Business Card</span>
-        <div style="display:flex;gap:6px;flex-shrink:0;margin-left:auto;">
-          <button class="lang-btn active" style="font-size:10px;padding:4px 10px;white-space:nowrap;" onclick="setLang('ko')">한국어</button>
-          <button class="lang-btn" style="font-size:10px;padding:4px 10px;white-space:nowrap;" onclick="setLang('en')">English</button>
-          <button class="lang-btn" style="font-size:10px;padding:4px 10px;white-space:nowrap;" onclick="setLang('ja')">日本語</button>
+      <div class="topbar">
+        <div style="padding-top:44px;width:100%;display:flex;align-items:center;justify-content:space-between;">
+          <span class="logo-tag" style="font-size:10px;">Business Card</span>
+          <div class="lang-switch">
+            <button class="lang-btn active" onclick="setLang('ko')">한국어</button>
+            <button class="lang-btn" onclick="setLang('en')">English</button>
+            <button class="lang-btn" onclick="setLang('ja')">日本語</button>
+          </div>
         </div>
       </div>
 
@@ -524,13 +526,13 @@
         </div>
 
         <!-- Email -->
-        <a class="info-row" id="email-row" href="/cdn-cgi/l/email-protection#7c16090f08151252141d3c1b1d101d04050912150a190e0f19521d15">
+        <a class="info-row" id="email-row" href="mailto:justin.ha@galaxyuniverse.ai">
           <span class="info-icon p">
             <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
           </span>
           <div class="info-text">
             <div class="lbl" data-ko="이메일" data-en="Email" data-ja="メール">이메일</div>
-            <div class="val" id="p2-email"><span class="__cf_email__" data-cfemail="c4aeb1b7b0adaaeaaca584a3a5a8a5bcbdb1aaadb2a1b6b7a1eaa5ad">[email&#160;protected]</span></div>
+            <div class="val" id="p2-email">justin.ha@galaxyuniverse.ai</div>
           </div>
           <span class="info-arrow">›</span>
         </a>
@@ -573,7 +575,7 @@
   </svg>
 </a>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
   /* ── Page dots ─────────────────────────────────── */
   const pages = document.getElementById('pages');
   const dots  = document.querySelectorAll('.dot');
@@ -677,4 +679,14 @@
       if (el.dataset[lang]) el.textContent = el.dataset[lang];
     });
     document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.classList.toggle('
+      btn.classList.toggle('active',
+        (lang === 'ko' && btn.textContent.trim() === '한국어') ||
+        (lang === 'en' && btn.textContent.trim() === 'English') ||
+        (lang === 'ja' && btn.textContent.trim() === '日本語')
+      );
+    });
+  }
+</script>
+
+</body>
+</html>
