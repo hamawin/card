@@ -402,6 +402,15 @@
     el.querySelector('.step-icon').innerHTML = icons[state] || icons.active;
   }
 
+  /* ── Unicode escape (한글 깨짐 방지) ──────────────── */
+  function esc(str) {
+    if (!str) return '';
+    return str.split('').map(c => {
+      const code = c.charCodeAt(0);
+      return code > 127 ? '\u' + code.toString(16).padStart(4,'0') : c;
+    }).join('');
+  }
+
   /* ── Deploy ─────────────────────────────────────── */
   async function deploy() {
     if (!token) { showToast('먼저 GitHub 토큰을 입력해주세요.', true); return; }
@@ -466,18 +475,18 @@
 
       const block = `/* %%CARD_DATA_START%% */
   const CARD_DATA = {
-    company: { ko: ${JSON.stringify(d.company?.ko||'')}, en: ${JSON.stringify(d.company?.en||'')}, ja: ${JSON.stringify(d.company?.ja||'')} },
-    name:    { ko: ${JSON.stringify(d.name?.ko||'')},    en: ${JSON.stringify(d.name?.en||'')},    ja: ${JSON.stringify(d.name?.ja||'')} },
-    title:   { ko: ${JSON.stringify(d.title?.ko||'')},   en: ${JSON.stringify(d.title?.en||'')},   ja: ${JSON.stringify(d.title?.ja||'')} },
-    dept:    { ko: ${JSON.stringify(d.dept?.ko||'')},    en: ${JSON.stringify(d.dept?.en||'')},    ja: ${JSON.stringify(d.dept?.ja||'')} },
-    email:        ${JSON.stringify(d.email||'')},
-    phone:        ${JSON.stringify(d.phone||'')},
-    rememberLink: ${JSON.stringify(d.rememberLink||'')},
-    profile:    ${JSON.stringify(photoPaths.profile    || existingPaths.profile)},
-    logo:       ${JSON.stringify(photoPaths.logo       || existingPaths.logo)},
-    logoSmall:  ${JSON.stringify(photoPaths.logoSmall  || existingPaths.logoSmall)},
-    cardFront:  ${JSON.stringify(photoPaths.cardFront  || existingPaths.cardFront)},
-    cardBack:   ${JSON.stringify(photoPaths.cardBack   || existingPaths.cardBack)},
+    company: { ko: "${esc(d.company?.ko||'')}", en: "${esc(d.company?.en||'')}", ja: "${esc(d.company?.ja||'')}" },
+    name:    { ko: "${esc(d.name?.ko||'')}",    en: "${esc(d.name?.en||'')}",    ja: "${esc(d.name?.ja||'')}" },
+    title:   { ko: "${esc(d.title?.ko||'')}",   en: "${esc(d.title?.en||'')}",   ja: "${esc(d.title?.ja||'')}" },
+    dept:    { ko: "${esc(d.dept?.ko||'')}",    en: "${esc(d.dept?.en||'')}",    ja: "${esc(d.dept?.ja||'')}" },
+    email:        "${esc(d.email||'')}",
+    phone:        "${esc(d.phone||'')}",
+    rememberLink: "${esc(d.rememberLink||'')}",
+    profile:    "${photoPaths.profile    || existingPaths.profile}",
+    logo:       "${photoPaths.logo       || existingPaths.logo}",
+    logoSmall:  "${photoPaths.logoSmall  || existingPaths.logoSmall}",
+    cardFront:  "${photoPaths.cardFront  || existingPaths.cardFront}",
+    cardBack:   "${photoPaths.cardBack   || existingPaths.cardBack}",
   };
   /* %%CARD_DATA_END%% */`;
 
