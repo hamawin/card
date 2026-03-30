@@ -613,19 +613,21 @@
      edit.html에서 저장하면 localStorage가 이 값을 덮어씁니다.
      사진은 base64 문자열 또는 파일 경로로 입력하세요.
   ─────────────────────────────────────────────────── */
+/* %%CARD_DATA_START%% */
   const CARD_DATA = {
-    company: { ko: 'YOUR COMPANY NAME', en: 'YOUR COMPANY NAME', ja: 'YOUR COMPANY NAME' },
-    name:    { ko: '홍길동', en: 'Gildong Hong', ja: 'ホン・ギルドン' },
-    title:   { ko: '대표이사', en: 'Chief Executive Officer', ja: '代表取締役' },
-    dept:    { ko: '경영지원팀', en: 'Management Support', ja: '経営支援チーム' },
-    email:   'your@email.com',
-    phone:   '010-0000-0000',
-    rememberLink: '',
-    profile:   '',   // base64 또는 'photo/profile.jpg'
-    logo:      '',   // base64 또는 'photo/logo.png'
-    cardFront: '',   // base64 또는 'photo/card_front.jpg'
-    cardBack:  '',   // base64 또는 'photo/card_back.jpg'
+    company: { ko: "갤럭시코퍼레이션", en: "Galaxy Corporation", ja: "ギャラクシーコーポレーション" },
+    name:    { ko: "하형석",    en: "Justin Ha",    ja: "ハ・ヒョンソク (河 炯 碩)" },
+    title:   { ko: "이사 / CEO Staff",   en: "Director / CEO Staff",   ja: "取締役 / CEO スタッフ" },
+    dept:    { ko: "CVC / M&A",    en: "CVC / M&A",    ja: "CVC / M&A" },
+    email:        "justin.ha@galaxyuniverse.ai",
+    phone:        "+82-010-7727-3028",
+    rememberLink: "",
+    profile:   "",
+    logo:      "",
+    cardFront: "",
+    cardBack:  "",
   };
+  /* %%CARD_DATA_END%% */
 
   /* ── Load from localStorage (없으면 CARD_DATA 사용) ── */
   (function loadData() {
