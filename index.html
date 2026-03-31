@@ -364,14 +364,15 @@
       }
     })
     .catch(function(e) { console.error('data.json 로드 실패:', e); });
-  function saveContact() {
+function saveContact() {
     var d = cardData;
-    var name = (d.name && d.name.ko) || '하형석';
+    var lang = currentLang;
+    var name = (d.name && d.name[lang]) || (d.name && d.name.ko) || '하형석';
     var phone = d.phone || '+82-010-7727-3028';
     var email = d.email || 'justin.ha@galaxyuniverse.ai';
-    var org = (d.company && d.company.ko) || '갤럭시코퍼레이션';
-    var title = (d.title && d.title.ko) || '이사 / CEO Staff';
-    var addr = (d.address && d.address.en) || '';
+    var org = (d.company && d.company[lang]) || (d.company && d.company.ko) || '갤럭시코퍼레이션';
+    var title = (d.title && d.title[lang]) || (d.title && d.title.ko) || '이사 / CEO Staff';
+    var addr = (d.address && d.address[lang]) || (d.address && d.address.en) || '';
     var vcard = 'BEGIN:VCARD\r\nVERSION:3.0\r\nFN:' + name + '\r\nORG:' + org + '\r\nTITLE:' + title + '\r\nTEL;TYPE=CELL:' + phone + '\r\nEMAIL:' + email + (addr ? '\r\nADR;TYPE=WORK:;;' + addr + ';;;;' : '') + '\r\nEND:VCARD';
     var blob = new Blob([vcard], { type: 'text/vcard;charset=utf-8' });
     var url = URL.createObjectURL(blob);
