@@ -30,7 +30,9 @@
     .nfc-badge svg { width:16px; height:16px; fill:var(--purple); }
     .company-block { display:flex; align-items:center; justify-content:center; background:var(--card); border:1px solid var(--border); border-radius:20px; overflow:hidden; position:relative; padding:18px; }
     .company-block::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--green),var(--purple)); z-index:1; }
+    /* 1번 수정: 가로 꽉차게 */
     .company-logo-only { width:100%; height:120px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .company-logo-only img { width:100%; height:100%; object-fit:cover; }
     .company-logo-placeholder { display:flex; align-items:center; justify-content:center; }
     .company-logo-placeholder svg { width:36px; height:36px; fill:#2a2a2a; }
     .profile-hero { background:var(--card); border:1px solid var(--border); border-radius:28px; overflow:hidden; }
@@ -42,7 +44,9 @@
     .hero-info-wrap .person-name { font-size:26px; font-weight:900; letter-spacing:-.02em; color:#fff; line-height:1.15; }
     .hero-info-wrap .person-title { font-size:12px; color:var(--gray); font-weight:300; letter-spacing:.03em; }
     .hero-company-row { display:flex; align-items:center; margin-top:12px; padding-top:12px; border-top:1px solid #1e1e1e; }
-    .hero-logo-wrap { width:80px; height:28px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    /* 2번 수정: 가로 꽉차게, 세로 1.5배 */
+    .hero-logo-wrap { width:100%; height:42px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .hero-logo-wrap img { width:100%; height:100%; object-fit:contain; }
     .remember-btn { display:flex; align-items:center; justify-content:space-between; background:linear-gradient(135deg,rgba(155,48,255,.15),rgba(57,255,20,.07)); border:1px solid rgba(155,48,255,.45); border-radius:20px; padding:20px 22px; text-decoration:none; transition:all .25s; position:relative; overflow:hidden; }
     .remember-btn::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(155,48,255,.08),rgba(57,255,20,.04)); opacity:0; transition:opacity .25s; }
     .remember-btn:hover::before { opacity:1; }
@@ -55,8 +59,9 @@
     .r-text .rsub { font-size:11px; color:var(--gray); margin-top:2px; }
     .r-arrow { width:34px; height:34px; border-radius:50%; border:1px solid rgba(155,48,255,.4); display:flex; align-items:center; justify-content:center; color:var(--purple2); font-size:18px; flex-shrink:0; transition:transform .2s; }
     .remember-btn:hover .r-arrow { transform:translateX(3px); }
-    .swipe-hint { display:flex; align-items:center; justify-content:center; gap:8px; color:#333; font-size:11px; letter-spacing:.1em; padding-bottom:10px; }
-    .swipe-hint svg { width:16px; height:16px; fill:#333; }
+    /* 3번 수정: 흰색, 글자 크게 */
+    .swipe-hint { display:flex; align-items:center; justify-content:center; gap:8px; color:#ccc; font-size:14px; letter-spacing:.1em; padding-bottom:10px; }
+    .swipe-hint svg { width:16px; height:16px; fill:#ccc; }
     .lang-btn { font-family:'Outfit',sans-serif; font-size:11px; letter-spacing:.1em; padding:5px 14px; border-radius:20px; border:1px solid var(--border); background:transparent; color:var(--gray); cursor:pointer; transition:all .2s; }
     .lang-btn.active { border-color:var(--green); color:var(--green); box-shadow:0 0 10px rgba(57,255,20,.2); }
     .flip-label { display:flex; align-items:center; justify-content:space-between; }
@@ -95,9 +100,7 @@
 <body>
 <div class="glow-green"></div>
 <div class="glow-purple"></div>
-
 <div class="pages" id="pages">
-
   <!-- PAGE 1 -->
   <div class="page" id="page1">
     <div class="page-inner">
@@ -108,7 +111,6 @@
           NFC
         </span>
       </div>
-
       <div class="company-block fade-up d2">
         <div class="company-logo-only">
           <div class="company-logo-placeholder" id="logo-placeholder">
@@ -117,7 +119,6 @@
           <img id="logo-img" style="display:none;width:100%;height:100%;object-fit:contain;" />
         </div>
       </div>
-
       <div class="profile-hero fade-up d3">
         <div class="hero-card-inner">
           <div class="hero-photo-wrap">
@@ -140,7 +141,6 @@
           </div>
         </div>
       </div>
-
       <a class="remember-btn fade-up d4" id="remember-btn" href="#" target="_blank" rel="noopener">
         <div class="r-left">
           <div class="r-icon">
@@ -154,7 +154,6 @@
         </div>
         <div class="r-arrow">›</div>
       </a>
-
       <div class="swipe-hint fade-up d5">
         <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
         Swipe for contact info
@@ -162,7 +161,6 @@
       </div>
     </div>
   </div>
-
   <!-- PAGE 2 -->
   <div class="page" id="page2">
     <div class="page-inner">
@@ -174,7 +172,6 @@
           <button class="lang-btn" style="font-size:10px;padding:4px 10px;white-space:nowrap;" id="btn-ja">日本語</button>
         </div>
       </div>
-
       <div class="flip-label">
         <div style="display:flex;align-items:center;gap:10px;">
           <button class="dl-btn" onclick="saveCurrentFace()">
@@ -187,7 +184,6 @@
           </span>
         </div>
       </div>
-
       <div class="card-3d-wrap" id="cardFlip" onclick="this.classList.toggle('flipped')">
         <div class="card-3d-inner">
           <div class="card-face card-front">
@@ -206,7 +202,6 @@
           </div>
         </div>
       </div>
-
       <div class="info-card">
         <div class="info-row">
           <span class="info-icon p"><svg viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg></span>
@@ -255,20 +250,15 @@
       </div>
     </div>
   </div>
-
 </div>
-
 <div class="page-dots">
   <div class="dot active" onclick="goPage(0)"></div>
   <div class="dot" onclick="goPage(1)"></div>
 </div>
-
 <a href="admin.html" id="edit-fab" style="position:fixed;bottom:20px;right:20px;z-index:200;width:36px;height:36px;border-radius:50%;background:#111;border:1px solid #2a2a2a;display:none;align-items:center;justify-content:center;opacity:.4;transition:opacity .2s;text-decoration:none;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.4">
   <svg viewBox="0 0 24 24" style="width:15px;height:15px;fill:#888"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
 </a>
-
 <script data-cfasync="false">
-  // 페이지 스크롤
   var pages = document.getElementById('pages');
   var dots = document.querySelectorAll('.dot');
   function goPage(i) { pages.scrollTo({ left: pages.clientWidth * i, behavior: 'smooth' }); }
@@ -276,8 +266,6 @@
     var idx = Math.round(pages.scrollLeft / pages.clientWidth);
     dots.forEach(function(d, i) { d.classList.toggle('active', i === idx); });
   });
-
-  // 언어별 텍스트 (JS에 하드코딩 - data.json과 별개)
   var LANG = {
     ko: {
       company:'회사', name:'이름', title:'직급', dept:'부서',
@@ -301,10 +289,8 @@
       rememberTitle:'名刺を保存', rememberSub:'Rememberで保存する'
     }
   };
-
   var currentLang = 'ko';
   var cardData = {};
-
   function setLang(lang) {
     currentLang = lang;
     var t = LANG[lang];
@@ -320,23 +306,17 @@
     document.getElementById('card-back-label').textContent = t.cardBack;
     document.getElementById('remember-title').textContent = t.rememberTitle;
     document.getElementById('remember-sub').textContent = t.rememberSub;
-
-    // 데이터 필드
     if (cardData.company) document.getElementById('p2-company').textContent = cardData.company[lang] || cardData.company.ko;
     if (cardData.name)    document.getElementById('p2-name').textContent    = cardData.name[lang]    || cardData.name.ko;
     if (cardData.title)   document.getElementById('p2-title').textContent   = cardData.title[lang]   || cardData.title.ko;
     if (cardData.dept)    document.getElementById('p2-dept').textContent    = cardData.dept[lang]    || cardData.dept.ko;
-
-    // 버튼 active
     document.getElementById('btn-ko').classList.toggle('active', lang === 'ko');
     document.getElementById('btn-en').classList.toggle('active', lang === 'en');
     document.getElementById('btn-ja').classList.toggle('active', lang === 'ja');
   }
-
   document.getElementById('btn-ko').onclick = function() { setLang('ko'); };
   document.getElementById('btn-en').onclick = function() { setLang('en'); };
   document.getElementById('btn-ja').onclick = function() { setLang('ja'); };
-
   function setImg(imgId, phId, src) {
     if (!src) return;
     var img = document.getElementById(imgId);
@@ -344,26 +324,21 @@
     if (img) { img.src = src; img.style.display = 'block'; }
     if (ph)  ph.style.display = 'none';
   }
-
-  // data.json 로드
   fetch('data.json?t=' + Date.now())
     .then(function(r) { return r.json(); })
     .then(function(d) {
       cardData = d;
-
       setImg('profile-img',    'profile-placeholder',    d.profile);
       setImg('logo-img',       'logo-placeholder',       d.logo);
       setImg('hero-logo-img',  'hero-logo-placeholder',  d.logoSmall);
       setImg('card-front-img', 'card-front-placeholder', d.cardFront);
       setImg('card-back-img',  'card-back-placeholder',  d.cardBack);
-
       if (d.name && d.name.ko)    document.getElementById('p1-name').textContent  = d.name.ko;
       if (d.title && d.title.ko)  document.getElementById('p1-title').textContent = d.title.ko;
       if (d.company && d.company.ko) document.getElementById('p2-company').textContent = d.company.ko;
       if (d.name && d.name.ko)    document.getElementById('p2-name').textContent   = d.name.ko;
       if (d.title && d.title.ko)  document.getElementById('p2-title').textContent  = d.title.ko;
       if (d.dept && d.dept.ko)    document.getElementById('p2-dept').textContent   = d.dept.ko;
-
       if (d.email) {
         document.getElementById('p2-email').textContent = d.email;
         document.getElementById('email-row').href = 'mailto:' + d.email;
@@ -377,7 +352,6 @@
       }
     })
     .catch(function(e) { console.error('data.json 로드 실패:', e); });
-
   function saveCurrentFace() {
     var isFlipped = document.getElementById('cardFlip').classList.contains('flipped');
     var img = document.getElementById(isFlipped ? 'card-back-img' : 'card-front-img');
