@@ -43,7 +43,7 @@
     .hero-info-wrap .person-name { font-size:26px; font-weight:900; letter-spacing:-.02em; color:#fff; line-height:1.15; }
     .hero-info-wrap .person-title { font-size:12px; color:var(--gray); font-weight:300; letter-spacing:.03em; }
     .hero-company-row { display:flex; align-items:center; justify-content:center; margin-top:auto; padding-top:12px; border-top:1px solid #1e1e1e; }
-    .hero-company-text { font-size:16px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; background:linear-gradient(90deg,var(--green),var(--purple2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; width:100%; text-align:center; white-space:nowrap; }
+    .hero-company-text { font-size:16px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; background:linear-gradient(90deg,var(--green),var(--purple2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; width:100%; text-align:center; line-height:1.4; }
     .remember-btn { display:flex; align-items:center; justify-content:space-between; background:linear-gradient(135deg,rgba(155,48,255,.15),rgba(57,255,20,.07)); border:1px solid rgba(155,48,255,.45); border-radius:20px; padding:20px 22px; text-decoration:none; transition:all .25s; position:relative; overflow:hidden; }
     .remember-btn::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(155,48,255,.08),rgba(57,255,20,.04)); opacity:0; transition:opacity .25s; }
     .remember-btn:hover::before { opacity:1; }
@@ -130,7 +130,7 @@
             <div class="person-name" id="p1-name">하형석</div>
             <div class="person-title" id="p1-title">이사 / CEO Staff</div>
             <div class="hero-company-row">
-              <div class="hero-company-text" id="hero-company-text">Galaxy Corporation</div>
+              <div class="hero-company-text" id="hero-company-text">Galaxy<br>Corporation</div>
             </div>
           </div>
         </div>
@@ -225,11 +225,11 @@
             <div class="val" id="p2-dept">CVC / M&amp;A</div>
           </div>
         </div>
-        <a class="info-row" id="email-row" href="mailto:justin.ha@galaxyuniverse.ai">
+        <a class="info-row" id="email-row" href="/cdn-cgi/l/email-protection#0e647b7d7a676020666f4e696f626f76777b6067786b7c7d6b206f67">
           <span class="info-icon p"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></span>
           <div class="info-text">
             <div class="lbl" id="lbl-email">이메일</div>
-            <div class="val" id="p2-email">justin.ha@galaxyuniverse.ai</div>
+            <div class="val" id="p2-email"><span class="__cf_email__" data-cfemail="4c26393f38252262242d0c2b2d202d34353922253a293e3f29622d25">[email&#160;protected]</span></div>
           </div>
           <span class="info-arrow">›</span>
         </a>
@@ -263,7 +263,7 @@
 <a href="admin.html" id="edit-fab" style="position:fixed;bottom:20px;right:20px;z-index:200;width:36px;height:36px;border-radius:50%;background:#111;border:1px solid #2a2a2a;display:none;align-items:center;justify-content:center;opacity:.4;transition:opacity .2s;text-decoration:none;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.4">
   <svg viewBox="0 0 24 24" style="width:15px;height:15px;fill:#888"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
 </a>
-<script data-cfasync="false">
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false">
   var pages = document.getElementById('pages');
   var dots = document.querySelectorAll('.dot');
   function goPage(i) { pages.scrollTo({ left: pages.clientWidth * i, behavior: 'smooth' }); }
@@ -385,13 +385,4 @@
   function saveCurrentFace() {
     var isFlipped = document.getElementById('cardFlip').classList.contains('flipped');
     var img = document.getElementById(isFlipped ? 'card-back-img' : 'card-front-img');
-    if (img && img.style.display !== 'none' && img.src) {
-      var a = document.createElement('a');
-      a.href = img.src;
-      a.download = isFlipped ? 'card_back.jpg' : 'card_front.jpg';
-      document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    }
-  }
-</script>
-</body>
-</html>
+    if (img && img.style.display !== 'none' &&
