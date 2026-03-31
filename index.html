@@ -28,19 +28,17 @@
     .logo-tag { font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--green); border:1px solid var(--green); padding:4px 12px; border-radius:20px; box-shadow:0 0 10px rgba(57,255,20,.25); }
     .nfc-badge { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--gray); letter-spacing:.1em; }
     .nfc-badge svg { width:16px; height:16px; fill:var(--purple); }
-    .company-block { display:flex; align-items:center; justify-content:center; background:var(--card); border:1px solid var(--border); border-radius:20px; overflow:hidden; position:relative; padding:0; }
+    .company-block { display:flex; align-items:center; justify-content:center; background:var(--card); border:1px solid var(--border); border-radius:20px; overflow:hidden; position:relative; padding:18px; }
     .company-block::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--green),var(--purple)); z-index:1; }
-    .company-logo-only { width:100%; height:160px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
-    .company-logo-only img { width:100%; height:100%; object-fit:cover; }
+    .company-logo-only { width:100%; height:120px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
     .company-logo-placeholder { display:flex; align-items:center; justify-content:center; }
     .company-logo-placeholder svg { width:36px; height:36px; fill:#2a2a2a; }
     .profile-hero { background:var(--card); border:1px solid var(--border); border-radius:28px; overflow:hidden; }
-    .hero-card-inner { display:flex; align-items:stretch; width:100%; min-height:320px; }
-    .hero-photo-wrap { width:45%; flex-shrink:0; position:relative; overflow:hidden; background:#151515; align-self:flex-end; }
-    .hero-photo-wrap .placeholder { width:100%; height:320px; display:flex; align-items:center; justify-content:center; background:#151515; }
+    .hero-card-inner { display:flex; align-items:stretch; width:100%; min-height:160px; }
+    .hero-photo-wrap { width:42%; flex-shrink:0; position:relative; overflow:hidden; background:#151515; }
+    .hero-photo-wrap .placeholder { width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:#151515; }
     .hero-photo-wrap .placeholder svg { width:44px; height:44px; fill:#333; }
-    .hero-photo-wrap img { width:100%; height:auto; object-fit:cover; object-position:top; display:block; }
-    .hero-info-wrap { flex:1; padding:28px 18px 22px; display:flex; flex-direction:column; justify-content:center; gap:6px; }
+    .hero-info-wrap { flex:1; padding:22px 18px; display:flex; flex-direction:column; justify-content:center; gap:6px; }
     .hero-info-wrap .person-name { font-size:26px; font-weight:900; letter-spacing:-.02em; color:#fff; line-height:1.15; }
     .hero-info-wrap .person-title { font-size:12px; color:var(--gray); font-weight:300; letter-spacing:.03em; }
     .hero-company-row { display:flex; align-items:center; margin-top:12px; padding-top:12px; border-top:1px solid #1e1e1e; }
@@ -57,8 +55,8 @@
     .r-text .rsub { font-size:11px; color:var(--gray); margin-top:2px; }
     .r-arrow { width:34px; height:34px; border-radius:50%; border:1px solid rgba(155,48,255,.4); display:flex; align-items:center; justify-content:center; color:var(--purple2); font-size:18px; flex-shrink:0; transition:transform .2s; }
     .remember-btn:hover .r-arrow { transform:translateX(3px); }
-    .swipe-hint { display:flex; align-items:center; justify-content:center; gap:8px; color:#888; font-size:13px; letter-spacing:.12em; padding-bottom:10px; }
-    .swipe-hint svg { width:16px; height:16px; fill:#888; }
+    .swipe-hint { display:flex; align-items:center; justify-content:center; gap:8px; color:#333; font-size:11px; letter-spacing:.1em; padding-bottom:10px; }
+    .swipe-hint svg { width:16px; height:16px; fill:#333; }
     .lang-btn { font-family:'Outfit',sans-serif; font-size:11px; letter-spacing:.1em; padding:5px 14px; border-radius:20px; border:1px solid var(--border); background:transparent; color:var(--gray); cursor:pointer; transition:all .2s; }
     .lang-btn.active { border-color:var(--green); color:var(--green); box-shadow:0 0 10px rgba(57,255,20,.2); }
     .flip-label { display:flex; align-items:center; justify-content:space-between; }
@@ -238,11 +236,11 @@
             <div class="val" id="p2-dept">CVC / M&amp;A</div>
           </div>
         </div>
-        <a class="info-row" id="email-row" href="/cdn-cgi/l/email-protection#82e8f7f1f6ebecaceae3c2e5e3eee3fafbf7ecebf4e7f0f1e7ace3eb">
+        <a class="info-row" id="email-row" href="mailto:justin.ha@galaxyuniverse.ai">
           <span class="info-icon p"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></span>
           <div class="info-text">
             <div class="lbl" id="lbl-email">이메일</div>
-            <div class="val" id="p2-email"><span class="__cf_email__" data-cfemail="87edf2f4f3eee9a9efe6c7e0e6ebe6fffef2e9eef1e2f5f4e2a9e6ee">[email&#160;protected]</span></div>
+            <div class="val" id="p2-email">justin.ha@galaxyuniverse.ai</div>
           </div>
           <span class="info-arrow">›</span>
         </a>
@@ -269,7 +267,7 @@
   <svg viewBox="0 0 24 24" style="width:15px;height:15px;fill:#888"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
 </a>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false">
+<script data-cfasync="false">
   // 페이지 스크롤
   var pages = document.getElementById('pages');
   var dots = document.querySelectorAll('.dot');
@@ -383,4 +381,13 @@
   function saveCurrentFace() {
     var isFlipped = document.getElementById('cardFlip').classList.contains('flipped');
     var img = document.getElementById(isFlipped ? 'card-back-img' : 'card-front-img');
-    if (img && img.style.display !== 'none' &&
+    if (img && img.style.display !== 'none' && img.src) {
+      var a = document.createElement('a');
+      a.href = img.src;
+      a.download = isFlipped ? 'card_back.jpg' : 'card_front.jpg';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    }
+  }
+</script>
+</body>
+</html>
