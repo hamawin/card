@@ -30,7 +30,6 @@
     .nfc-badge svg { width:16px; height:16px; fill:var(--purple); }
     .company-block { display:flex; align-items:center; justify-content:center; background:var(--card); border:1px solid var(--border); border-radius:20px; overflow:hidden; position:relative; padding:0; }
     .company-block::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--green),var(--purple)); z-index:1; }
-    /* 1번: 가로 꽉차게, 세로 1.3배(156px) */
     .company-logo-only { width:100%; height:156px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
     .company-logo-only img { width:100%; height:100%; object-fit:cover; }
     .company-logo-placeholder { display:flex; align-items:center; justify-content:center; }
@@ -44,7 +43,6 @@
     .hero-info-wrap .person-name { font-size:26px; font-weight:900; letter-spacing:-.02em; color:#fff; line-height:1.15; }
     .hero-info-wrap .person-title { font-size:12px; color:var(--gray); font-weight:300; letter-spacing:.03em; }
     .hero-company-row { display:flex; align-items:center; margin-top:12px; padding-top:12px; border-top:1px solid #1e1e1e; }
-    /* 2번: 가로 꽉차게, 세로 42px, 살짝 아래로 */
     .hero-logo-wrap { width:100%; height:42px; display:flex; align-items:center; justify-content:center; overflow:hidden; margin-top:8px; }
     .hero-logo-wrap img { width:100%; height:100%; object-fit:contain; }
     .remember-btn { display:flex; align-items:center; justify-content:space-between; background:linear-gradient(135deg,rgba(155,48,255,.15),rgba(57,255,20,.07)); border:1px solid rgba(155,48,255,.45); border-radius:20px; padding:20px 22px; text-decoration:none; transition:all .25s; position:relative; overflow:hidden; }
@@ -59,7 +57,6 @@
     .r-text .rsub { font-size:11px; color:var(--gray); margin-top:2px; }
     .r-arrow { width:34px; height:34px; border-radius:50%; border:1px solid rgba(155,48,255,.4); display:flex; align-items:center; justify-content:center; color:var(--purple2); font-size:18px; flex-shrink:0; transition:transform .2s; }
     .remember-btn:hover .r-arrow { transform:translateX(3px); }
-    /* 3번: 흰색, 글자 크게 */
     .swipe-hint { display:flex; align-items:center; justify-content:center; gap:8px; color:#ccc; font-size:14px; letter-spacing:.1em; padding-bottom:10px; }
     .swipe-hint svg { width:16px; height:16px; fill:#ccc; }
     .lang-btn { font-family:'Outfit',sans-serif; font-size:11px; letter-spacing:.1em; padding:5px 14px; border-radius:20px; border:1px solid var(--border); background:transparent; color:var(--gray); cursor:pointer; transition:all .2s; }
@@ -91,6 +88,9 @@
     .info-text .lbl { font-size:10px; color:var(--gray); letter-spacing:.12em; text-transform:uppercase; margin-bottom:2px; }
     .info-text .val { font-size:14px; color:var(--white); }
     .info-arrow { color:#2a2a2a; font-size:18px; margin-left:auto; flex-shrink:0; }
+    .save-contact-btn { display:flex; align-items:center; justify-content:center; gap:10px; width:100%; background:linear-gradient(135deg,rgba(57,255,20,.15),rgba(57,255,20,.05)); border:1px solid rgba(57,255,20,.4); border-radius:16px; padding:16px; font-family:'Outfit',sans-serif; font-size:14px; font-weight:600; color:var(--green); cursor:pointer; transition:all .25s; }
+    .save-contact-btn:hover { background:linear-gradient(135deg,rgba(57,255,20,.25),rgba(57,255,20,.1)); box-shadow:0 0 20px rgba(57,255,20,.2); }
+    .save-contact-btn svg { width:18px; height:18px; fill:var(--green); }
     .fade-up { opacity:0; transform:translateY(16px); animation:fadeup .45s ease forwards; }
     @keyframes fadeup { to { opacity:1; transform:translateY(0); } }
     .d1{animation-delay:.04s} .d2{animation-delay:.12s} .d3{animation-delay:.20s}
@@ -247,7 +247,19 @@
           </div>
           <span class="info-arrow">›</span>
         </a>
+        <div class="info-row">
+          <span class="info-icon p"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></span>
+          <div class="info-text">
+            <div class="lbl" id="lbl-address">주소</div>
+            <div class="val" id="p2-address">서울 영등포구 국제금융로 10 Three IFC 53F</div>
+          </div>
+        </div>
       </div>
+      <!-- 연락처 저장 버튼 -->
+      <button class="save-contact-btn" onclick="saveContact()">
+        <svg viewBox="0 0 24 24"><path d="M20 0H4C2.9 0 2 .9 2 2v20l4-4h14c1.1 0 2-.9 2-2V2c0-1.1-.9-2-2-2zm-5 9h-2v2h2v2h-2v2h-2v-2H9v-2h2V9H9V7h2V5h2v2h2v2z"/></svg>
+        <span id="btn-save-contact">연락처 저장</span>
+      </button>
     </div>
   </div>
 </div>
@@ -269,24 +281,27 @@
   var LANG = {
     ko: {
       company:'회사', name:'이름', title:'직급', dept:'부서',
-      email:'이메일', phone:'휴대폰',
+      email:'이메일', phone:'휴대폰', address:'주소',
       save:'저장', flip:'탭해서 뒤집기',
       cardFront:'명함 앞면', cardBack:'명함 뒷면',
-      rememberTitle:'명함 저장하기', rememberSub:'Remember에서 바로 저장'
+      rememberTitle:'명함 저장하기', rememberSub:'Remember에서 바로 저장',
+      saveContact:'연락처 저장'
     },
     en: {
       company:'Company', name:'Name', title:'Title', dept:'Department',
-      email:'Email', phone:'Mobile',
+      email:'Email', phone:'Mobile', address:'Address',
       save:'Save', flip:'Tap to flip',
       cardFront:'Card Front', cardBack:'Card Back',
-      rememberTitle:'Save Contact', rememberSub:'Save directly in Remember'
+      rememberTitle:'Save Contact', rememberSub:'Save directly in Remember',
+      saveContact:'Save to Contacts'
     },
     ja: {
       company:'会社', name:'名前', title:'役職', dept:'部署',
-      email:'メール', phone:'携帯',
+      email:'メール', phone:'携帯', address:'住所',
       save:'保存', flip:'タップして裏面',
       cardFront:'名刺 表面', cardBack:'名刺 裏面',
-      rememberTitle:'名刺を保存', rememberSub:'Rememberで保存する'
+      rememberTitle:'名刺を保存', rememberSub:'Rememberで保存する',
+      saveContact:'連絡先に保存'
     }
   };
   var currentLang = 'ko';
@@ -300,16 +315,19 @@
     document.getElementById('lbl-dept').textContent = t.dept;
     document.getElementById('lbl-email').textContent = t.email;
     document.getElementById('lbl-phone').textContent = t.phone;
+    document.getElementById('lbl-address').textContent = t.address;
     document.getElementById('btn-save').textContent = t.save;
     document.getElementById('btn-flip').textContent = t.flip;
     document.getElementById('card-front-label').textContent = t.cardFront;
     document.getElementById('card-back-label').textContent = t.cardBack;
     document.getElementById('remember-title').textContent = t.rememberTitle;
     document.getElementById('remember-sub').textContent = t.rememberSub;
+    document.getElementById('btn-save-contact').textContent = t.saveContact;
     if (cardData.company) document.getElementById('p2-company').textContent = cardData.company[lang] || cardData.company.ko;
     if (cardData.name)    document.getElementById('p2-name').textContent    = cardData.name[lang]    || cardData.name.ko;
     if (cardData.title)   document.getElementById('p2-title').textContent   = cardData.title[lang]   || cardData.title.ko;
     if (cardData.dept)    document.getElementById('p2-dept').textContent    = cardData.dept[lang]    || cardData.dept.ko;
+    if (cardData.address) document.getElementById('p2-address').textContent = cardData.address[lang] || cardData.address.ko || '';
     document.getElementById('btn-ko').classList.toggle('active', lang === 'ko');
     document.getElementById('btn-en').classList.toggle('active', lang === 'en');
     document.getElementById('btn-ja').classList.toggle('active', lang === 'ja');
@@ -339,6 +357,7 @@
       if (d.name && d.name.ko)    document.getElementById('p2-name').textContent   = d.name.ko;
       if (d.title && d.title.ko)  document.getElementById('p2-title').textContent  = d.title.ko;
       if (d.dept && d.dept.ko)    document.getElementById('p2-dept').textContent   = d.dept.ko;
+      if (d.address && d.address.ko) document.getElementById('p2-address').textContent = d.address.ko;
       if (d.email) {
         document.getElementById('p2-email').textContent = d.email;
         document.getElementById('email-row').href = 'mailto:' + d.email;
@@ -352,6 +371,25 @@
       }
     })
     .catch(function(e) { console.error('data.json 로드 실패:', e); });
+  function saveContact() {
+    var d = cardData;
+    var name = (d.name && d.name.ko) || '하형석';
+    var nameEn = (d.name && d.name.en) || 'Justin Ha';
+    var phone = d.phone || '+82-010-7727-3028';
+    var email = d.email || 'justin.ha@galaxyuniverse.ai';
+    var org = (d.company && d.company.ko) || '갤럭시코퍼레이션';
+    var title = (d.title && d.title.ko) || '이사 / CEO Staff';
+    var addr = (d.address && d.address.en) || '';
+    var vcard = 'BEGIN:VCARD\r\nVERSION:3.0\r\nN:' + name + ';;;\r\nFN:' + name + '\r\nORG:' + org + '\r\nTITLE:' + title + '\r\nTEL;TYPE=CELL:' + phone + '\r\nEMAIL:' + email + (addr ? '\r\nADR;TYPE=WORK:;;' + addr + ';;;;' : '') + '\r\nEND:VCARD';
+    var blob = new Blob([vcard], { type: 'text/vcard;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = name + '.vcf';
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
   function saveCurrentFace() {
     var isFlipped = document.getElementById('cardFlip').classList.contains('flipped');
     var img = document.getElementById(isFlipped ? 'card-back-img' : 'card-front-img');
