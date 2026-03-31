@@ -19,13 +19,13 @@
     "en": "CVC / M&A",
     "ja": "CVC / M&A"
   },
-  "address": {
-    "ko": "서울 영등포구 국제금융로 10 Three IFC 53F",
-    "en": "10 Gukjegeumyung-ro, Yeongdeungpo-gu, Seoul, Republic of Korea",
-    "ja": "ソウル市永登浦区国際金融路10 Three IFC 53F"
-  },
   "email": "justin.ha@galaxyuniverse.ai",
   "phone": "+82-010-7727-3028",
+  "address": {
+    "ko": "서울 영등포구 국제금융로 10 Two IFC 29F",
+    "en": "10 Gukjegeumyung-ro, Yeongdeungpo-gu, Seoul",
+    "ja": "ソウル市永登浦区国際金融路10 Two IFC 29F"
+  },
   "rememberLink": "https://link.rmbr.in/g7fi8o",
   "profile": "photo/profile.jpg",
   "logo": "photo/logo.png",
