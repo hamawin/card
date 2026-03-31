@@ -124,7 +124,7 @@
         </div>
       </div>
       <div class="photo-upload">
-        <label class="lbl">회사 로고 (상단)</label>
+        <label class="lbl">회사 로고</label>
         <div class="photo-drop" id="drop-logo">
           <input type="file" accept="image/*" id="file-logo" />
           <span class="clear-btn" id="clear-logo">×</span>
@@ -132,15 +132,7 @@
           <img class="preview" id="img-logo" style="display:none" />
         </div>
       </div>
-      <div class="photo-upload">
-        <label class="lbl">회사 로고 (프로필)</label>
-        <div class="photo-drop" id="drop-logoSmall">
-          <input type="file" accept="image/*" id="file-logoSmall" />
-          <span class="clear-btn" id="clear-logoSmall">×</span>
-          <div class="placeholder" id="ph-logoSmall"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>프로필 로고</div>
-          <img class="preview" id="img-logoSmall" style="display:none" />
-        </div>
-      </div>
+
       <div class="photo-upload wide">
         <label class="lbl">명함 앞면</label>
         <div class="photo-drop card-ratio" id="drop-cardFront">
@@ -245,7 +237,6 @@
     rememberLink: 'https://link.rmbr.in/g7fi8o',
     profile:   'photo/profile.jpg',
     logo:      'photo/logo.png',
-    logoSmall: 'photo/logo_small.jpg',
     cardFront: 'photo/card_front.jpg',
     cardBack:  'photo/card_back.jpg'
   };
@@ -304,7 +295,7 @@
   }
 
   // 사진 처리
-  var photoKeys = ['profile', 'logo', 'logoSmall', 'cardFront', 'cardBack'];
+  var photoKeys = ['profile', 'logo', 'cardFront', 'cardBack'];
   photoKeys.forEach(function(key) {
     document.getElementById('file-' + key).onchange = function() { handlePhoto(this, key); };
     document.getElementById('clear-' + key).onclick = function(e) { clearPhoto(e, key); };
@@ -417,7 +408,6 @@
     var photoUploadKeys = [
       { key: 'profile',   path: 'photo/profile' },
       { key: 'logo',      path: 'photo/logo' },
-      { key: 'logoSmall', path: 'photo/logo_small' },
       { key: 'cardFront', path: 'photo/card_front' },
       { key: 'cardBack',  path: 'photo/card_back' },
     ];
@@ -445,7 +435,6 @@
           rememberLink: v('rememberLink') || existingPaths.rememberLink,
           profile:   photoPaths.profile   || existingPaths.profile,
           logo:      photoPaths.logo      || existingPaths.logo,
-          logoSmall: photoPaths.logoSmall || existingPaths.logoSmall,
           cardFront: photoPaths.cardFront || existingPaths.cardFront,
           cardBack:  photoPaths.cardBack  || existingPaths.cardBack,
         };
