@@ -28,7 +28,7 @@
     .logo-tag { font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--green); border:1px solid var(--green); padding:4px 12px; border-radius:20px; box-shadow:0 0 10px rgba(57,255,20,.25); }
     .nfc-badge { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--gray); letter-spacing:.1em; }
     .nfc-badge svg { width:16px; height:16px; fill:var(--purple); }
-    .company-block { display:flex; align-items:center; justify-content:center; background:var(--card); border:1px solid var(--border); border-radius:20px; overflow:hidden; position:relative; padding:18px; }
+    .company-block { display:flex; align-items:center; justify-content:center; background:var(--card); border:1px solid var(--border); border-radius:20px; overflow:hidden; position:relative; padding:0; }
     .company-block::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--green),var(--purple)); z-index:1; }
     /* 1번 수정: 가로 꽉차게 */
     .company-logo-only { width:100%; height:120px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
@@ -116,7 +116,7 @@
           <div class="company-logo-placeholder" id="logo-placeholder">
             <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
           </div>
-          <img id="logo-img" style="display:none;width:100%;height:100%;object-fit:contain;" />
+          <img id="logo-img" style="display:none;width:100%;height:100%;object-fit:cover;" />
         </div>
       </div>
       <div class="profile-hero fade-up d3">
