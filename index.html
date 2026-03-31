@@ -94,6 +94,14 @@
     @keyframes fadeup { to { opacity:1; transform:translateY(0); } }
     .d1{animation-delay:.04s} .d2{animation-delay:.12s} .d3{animation-delay:.20s}
     .d4{animation-delay:.28s} .d5{animation-delay:.36s} .d6{animation-delay:.44s}
+
+#profile-img {
+      /* --- 여기서 원하는 확대 배율을 설정합니다. --- */
+      transform: scale(1.2); /* 👈 이 숫자를 조절하세요 (예: 1.2 = 120% 확대) */
+      
+      transform-origin: center center; /* 이미지가 중앙을 기준으로 확대되도록 설정 */
+    }
+    
   </style>
 </head>
 <body>
