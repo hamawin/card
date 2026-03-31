@@ -195,6 +195,14 @@
     <div class="field"><label>휴대폰</label><input id="phone" type="tel" placeholder="010-0000-0000" /></div>
   </div>
   <div class="section">
+    <div class="section-title">주소</div>
+    <div class="lang-fields">
+      <div class="lang-row"><span class="lang-tag">한</span><div class="field" style="flex:1"><input id="address-ko" placeholder="주소 (한국어)" /></div></div>
+      <div class="lang-row"><span class="lang-tag en">EN</span><div class="field" style="flex:1"><input id="address-en" placeholder="Address (English)" /></div></div>
+      <div class="lang-row"><span class="lang-tag jp">JP</span><div class="field" style="flex:1"><input id="address-ja" placeholder="住所 (日本語)" /></div></div>
+    </div>
+  </div>
+  <div class="section">
     <div class="section-title">Remember 앱 링크</div>
     <div class="field"><label>Temporary Link</label><input id="rememberLink" type="url" placeholder="https://rmb.me/..." /></div>
   </div>
@@ -231,6 +239,7 @@
     dept:    { ko: 'CVC / M&A', en: 'CVC / M&A', ja: 'CVC / M&A' },
     email: 'justin.ha@galaxyuniverse.ai',
     phone: '+82-010-7727-3028',
+    address: { ko: '서울 영등포구 국제금융로 10 Three IFC 53F', en: '10 Gukjegeumyung-ro, Yeongdeungpo-gu, Seoul', ja: 'ソウル市永登浦区国際金融路10 Three IFC 53F' },
     rememberLink: 'https://link.rmbr.in/g7fi8o',
     profile:   'photo/profile.jpg',
     logo:      'photo/logo.png',
@@ -343,6 +352,10 @@
         if (!d) d = DEFAULTS;
         var data = Object.assign({}, DEFAULTS, d);
         // 중첩 객체 병합
+        // address 빈값이면 기존값 유지
+        ['ko','en','ja'].forEach(function(l) {
+          if (!newData.address[l]) newData.address[l] = existingPaths.address ? existingPaths.address[l] : DEFAULTS.address[l];
+        });
         ['company','name','title','dept'].forEach(function(f) {
           data[f] = Object.assign({}, DEFAULTS[f], d[f] || {});
         });
@@ -357,6 +370,11 @@
         var el = document.getElementById(f + '-' + l);
         if (el && d[f] && d[f][l]) el.value = d[f][l];
       });
+    });
+    // address
+    ['ko','en','ja'].forEach(function(l) {
+      var el = document.getElementById('address-' + l);
+      if (el && d.address && d.address[l]) el.value = d.address[l];
     });
     ['email','phone','rememberLink'].forEach(function(k) {
       var el = document.getElementById(k);
@@ -421,6 +439,7 @@
           dept:    { ko: v('dept-ko'),    en: v('dept-en'),    ja: v('dept-ja') },
           email:        v('email')        || existingPaths.email,
           phone:        v('phone')        || existingPaths.phone,
+          address: { ko: v('address-ko'), en: v('address-en'), ja: v('address-ja') },
           rememberLink: v('rememberLink') || existingPaths.rememberLink,
           profile:   photoPaths.profile   || existingPaths.profile,
           logo:      photoPaths.logo      || existingPaths.logo,
@@ -430,6 +449,10 @@
         };
 
         // 빈값이면 기존값 유지
+        // address 빈값이면 기존값 유지
+        ['ko','en','ja'].forEach(function(l) {
+          if (!newData.address[l]) newData.address[l] = existingPaths.address ? existingPaths.address[l] : DEFAULTS.address[l];
+        });
         ['company','name','title','dept'].forEach(function(f) {
           ['ko','en','ja'].forEach(function(l) {
             if (!newData[f][l]) newData[f][l] = existingPaths[f] ? existingPaths[f][l] : DEFAULTS[f][l];
