@@ -39,12 +39,11 @@
     .hero-photo-wrap { width:42%; flex-shrink:0; position:relative; overflow:hidden; background:#151515; }
     .hero-photo-wrap .placeholder { width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:#151515; }
     .hero-photo-wrap .placeholder svg { width:44px; height:44px; fill:#333; }
-    .hero-info-wrap { flex:1; padding:22px 18px; display:flex; flex-direction:column; justify-content:center; gap:6px; }
+    .hero-info-wrap { flex:1; padding:22px 18px; display:flex; flex-direction:column; justify-content:space-between; gap:6px; }
     .hero-info-wrap .person-name { font-size:26px; font-weight:900; letter-spacing:-.02em; color:#fff; line-height:1.15; }
     .hero-info-wrap .person-title { font-size:12px; color:var(--gray); font-weight:300; letter-spacing:.03em; }
-    .hero-company-row { display:flex; align-items:center; margin-top:12px; padding-top:12px; border-top:1px solid #1e1e1e; }
-    .hero-logo-wrap { width:100%; height:42px; display:flex; align-items:center; justify-content:center; overflow:hidden; margin-top:8px; }
-    .hero-logo-wrap img { width:100%; height:100%; object-fit:contain; }
+    .hero-company-row { display:flex; align-items:center; justify-content:center; margin-top:auto; padding-top:12px; border-top:1px solid #1e1e1e; }
+    .hero-company-text { font-size:16px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; background:linear-gradient(90deg,var(--green),var(--purple2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; width:100%; text-align:center; white-space:nowrap; }
     .remember-btn { display:flex; align-items:center; justify-content:space-between; background:linear-gradient(135deg,rgba(155,48,255,.15),rgba(57,255,20,.07)); border:1px solid rgba(155,48,255,.45); border-radius:20px; padding:20px 22px; text-decoration:none; transition:all .25s; position:relative; overflow:hidden; }
     .remember-btn::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(155,48,255,.08),rgba(57,255,20,.04)); opacity:0; transition:opacity .25s; }
     .remember-btn:hover::before { opacity:1; }
@@ -131,12 +130,7 @@
             <div class="person-name" id="p1-name">하형석</div>
             <div class="person-title" id="p1-title">이사 / CEO Staff</div>
             <div class="hero-company-row">
-              <div class="hero-logo-wrap">
-                <div id="hero-logo-placeholder">
-                  <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#333"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>
-                </div>
-                <img id="hero-logo-img" style="display:none;width:100%;height:100%;object-fit:contain;" />
-              </div>
+              <div class="hero-company-text" id="hero-company-text">Galaxy Corporation</div>
             </div>
           </div>
         </div>
@@ -255,7 +249,6 @@
           </div>
         </div>
       </div>
-      <!-- 연락처 저장 버튼 -->
       <button class="save-contact-btn" onclick="saveContact()">
         <svg viewBox="0 0 24 24"><path d="M20 0H4C2.9 0 2 .9 2 2v20l4-4h14c1.1 0 2-.9 2-2V2c0-1.1-.9-2-2-2zm-5 9h-2v2h2v2h-2v2h-2v-2H9v-2h2V9H9V7h2V5h2v2h2v2z"/></svg>
         <span id="btn-save-contact">연락처 저장</span>
@@ -348,11 +341,11 @@
       cardData = d;
       setImg('profile-img',    'profile-placeholder',    d.profile);
       setImg('logo-img',       'logo-placeholder',       d.logo);
-      setImg('hero-logo-img',  'hero-logo-placeholder',  d.logoSmall);
       setImg('card-front-img', 'card-front-placeholder', d.cardFront);
       setImg('card-back-img',  'card-back-placeholder',  d.cardBack);
       if (d.name && d.name.ko)    document.getElementById('p1-name').textContent  = d.name.ko;
       if (d.title && d.title.ko)  document.getElementById('p1-title').textContent = d.title.ko;
+      if (d.company && d.company.en) document.getElementById('hero-company-text').textContent = d.company.en;
       if (d.company && d.company.ko) document.getElementById('p2-company').textContent = d.company.ko;
       if (d.name && d.name.ko)    document.getElementById('p2-name').textContent   = d.name.ko;
       if (d.title && d.title.ko)  document.getElementById('p2-title').textContent  = d.title.ko;
@@ -374,13 +367,12 @@
   function saveContact() {
     var d = cardData;
     var name = (d.name && d.name.ko) || '하형석';
-    var nameEn = (d.name && d.name.en) || 'Justin Ha';
     var phone = d.phone || '+82-010-7727-3028';
     var email = d.email || 'justin.ha@galaxyuniverse.ai';
     var org = (d.company && d.company.ko) || '갤럭시코퍼레이션';
     var title = (d.title && d.title.ko) || '이사 / CEO Staff';
     var addr = (d.address && d.address.en) || '';
-    var vcard = 'BEGIN:VCARD\r\nVERSION:3.0\r\nN:' + name + ';;;\r\nFN:' + name + '\r\nORG:' + org + '\r\nTITLE:' + title + '\r\nTEL;TYPE=CELL:' + phone + '\r\nEMAIL:' + email + (addr ? '\r\nADR;TYPE=WORK:;;' + addr + ';;;;' : '') + '\r\nEND:VCARD';
+    var vcard = 'BEGIN:VCARD\r\nVERSION:3.0\r\nFN:' + name + '\r\nORG:' + org + '\r\nTITLE:' + title + '\r\nTEL;TYPE=CELL:' + phone + '\r\nEMAIL:' + email + (addr ? '\r\nADR;TYPE=WORK:;;' + addr + ';;;;' : '') + '\r\nEND:VCARD';
     var blob = new Blob([vcard], { type: 'text/vcard;charset=utf-8' });
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
