@@ -345,7 +345,7 @@
       setImg('card-back-img',  'card-back-placeholder',  d.cardBack);
       if (d.name && d.name.ko)    document.getElementById('p1-name').textContent  = d.name.ko;
       if (d.title && d.title.ko)  document.getElementById('p1-title').textContent = d.title.ko;
-      if (d.company && d.company.en) document.getElementById('hero-company-text').textContent = d.company.en;
+      if (d.company && d.company.en) document.getElementById('hero-company-text').innerHTML = d.company.en.replace(' ', '<br>');
       if (d.company && d.company.ko) document.getElementById('p2-company').textContent = d.company.ko;
       if (d.name && d.name.ko)    document.getElementById('p2-name').textContent   = d.name.ko;
       if (d.title && d.title.ko)  document.getElementById('p2-title').textContent  = d.title.ko;
